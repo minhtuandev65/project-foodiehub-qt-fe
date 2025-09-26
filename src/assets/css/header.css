@@ -1,0 +1,39 @@
+#header{
+    padding: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    margin: 0 !important;
+}
+
+.header-scroll{
+    background: rgba(0, 0, 0, 0.3);
+    transition: all 0.5s;
+}
+
+#header .button-header {
+    border: none;
+    border-radius: 20px;
+}
+
+#header .button-header:hover {
+    border: none;
+    box-shadow: -1px 1px 5px -3px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -1px 1px 5px -3px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -1px 1px 5px -3px rgba(0, 0, 0, 0.75);
+}
+
+    #header .button-login {
+        background: #fff;
+        color: var(--color-primary);
+        font-weight: 600;
+    }
+
+
+    #header .button-register {
+        background: #000;
+        color: #fff;
+        font-weight: 600;
+    }

@@ -1,0 +1,366 @@
+/* register.css */
+
+.register-page {
+    padding: 50px 0;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #fed7aa 0%, #fef2f2 50%, #fce7f3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    position: relative;
+}
+
+/* Background decorations */
+.bg-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.decoration-item {
+    position: absolute;
+    opacity: 0.15;
+    user-select: none;
+}
+
+.utensils-1 {
+    top: 80px;
+    left: 80px;
+    font-size: 120px;
+    color: #fed7aa;
+}
+
+.chef-hat {
+    bottom: 80px;
+    right: 80px;
+    font-size: 100px;
+    color: #fca5a5;
+}
+
+.utensils-2 {
+    top: 50%;
+    left: 40px;
+    font-size: 80px;
+    color: #f9a8d4;
+    transform: translateY(-50%);
+}
+
+/* Register container */
+.register-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 600px;
+}
+
+.register-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Logo section */
+.logo-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #f97316, #ef4444);
+    border-radius: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+}
+
+.logo-title {
+    background: linear-gradient(135deg, #ea580c, #dc2626) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin-bottom: 8px !important;
+    font-weight: 700 !important;
+    font-size: 32px !important;
+}
+
+.logo-subtitle {
+    color: #6b7280 !important;
+    font-size: 16px;
+}
+
+/* Form styles */
+.register-form {
+    margin-top: 0;
+}
+
+.register-form .ant-form-item-label>label {
+    color: #374151;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.custom-input {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(8px);
+    border: 2px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    height: auto !important;
+}
+
+.custom-input:hover {
+    border-color: #f97316 !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.custom-input:focus,
+.custom-input.ant-input-focused {
+    border-color: #f97316 !important;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+.custom-input[readonly] {
+    background: rgba(248, 250, 252, 0.8) !important;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.input-icon {
+    color: #6b7280;
+    font-size: 16px;
+}
+
+/* Form options */
+.form-options {
+    margin-bottom: 24px !important;
+}
+
+.agree-checkbox {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.agree-checkbox .ant-checkbox {
+    border-radius: 4px;
+}
+
+.agree-checkbox .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #f97316;
+    border-color: #f97316;
+}
+
+.terms-link,
+.privacy-link {
+    color: #ea580c !important;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.terms-link:hover,
+.privacy-link:hover {
+    color: #c2410c !important;
+    text-decoration: underline;
+}
+
+/* Submit button */
+.submit-button {
+    background: linear-gradient(135deg, #f97316, #ef4444) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    height: 48px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.submit-button:hover {
+    background: linear-gradient(135deg, #ea580c, #dc2626) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4) !important;
+}
+
+.submit-button:focus {
+    background: linear-gradient(135deg, #ea580c, #dc2626) !important;
+}
+
+.submit-button.ant-btn-loading {
+    background: linear-gradient(135deg, #fed7aa, #fca5a5) !important;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+}
+
+/* Social section */
+.social-section {
+    margin-top: 32px;
+}
+
+.social-divider {
+    margin: 24px 0;
+}
+
+.social-divider .ant-divider-inner-text {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.social-button {
+    height: 44px !important;
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+    background: #ffffff !important;
+    border: 1px solid #e5e7eb !important;
+    color: #374151 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 90%;
+}
+
+.social-button .ant-btn-icon {
+    margin-right: 5px;
+}
+
+.social-button:hover {
+    background: #f9fafb !important;
+    border-color: #d1d5db !important;
+    transform: translateY(-1px);
+}
+
+.social-button:hover span {
+    color: var(--color-primary);
+}
+
+.google-button:hover .anticon {
+    color: #4285f4 !important;
+}
+
+.facebook-button:hover .anticon {
+    color: #1877f2 !important;
+}
+
+/* Login section */
+.login-section {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(229, 231, 235, 0.5);
+}
+
+.login-link {
+    color: #ea580c !important;
+    font-weight: 600 !important;
+    text-decoration: none;
+}
+
+.login-link:hover {
+    color: #c2410c !important;
+}
+
+/* Error states */
+.ant-form-item-has-error .custom-input {
+    border-color: #ef4444 !important;
+}
+
+.ant-form-item-has-error .custom-input:focus,
+.ant-form-item-has-error .custom-input.ant-input-focused {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Row spacing */
+.ant-row {
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+}
+
+.ant-col {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .register-card {
+        padding: 32px 24px;
+        border-radius: 20px;
+        margin: 0 16px;
+    }
+
+    .logo-title {
+        font-size: 28px !important;
+    }
+
+    .register-container {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .register-card {
+        padding: 24px 20px;
+        border-radius: 16px;
+        margin: 0 12px;
+    }
+
+    .logo-title {
+        font-size: 24px !important;
+    }
+
+    .decoration-item {
+        display: none;
+    }
+
+    .social-button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .register-page {
+        padding: 12px 0;
+    }
+
+    /* Stack name fields on mobile */
+    .ant-col {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Custom scrollbar for better aesthetics */
+.login-pag ::-webkit-scrollbar {
+    width: 8px;
+}
+
+.login-pag ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.login-pag ::-webkit-scrollbar-thumb {
+    background: rgba(249, 115, 22, 0.3);
+    border-radius: 4px;
+}
+
+.login-pag ::-webkit-scrollbar-thumb:hover {
+    background: rgba(249, 115, 22, 0.5);
+}
