@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import '../../assets/css/homepage.css'
 
 function Home() {
+    console.log(123)
     return (
         <Row id='home-page'>
             <Col span={24} className='px-0' style={{paddingLeft:'0 !important', paddingRight:'0 !important'}}>
