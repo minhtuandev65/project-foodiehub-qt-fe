@@ -1,20 +1,22 @@
 import { Card, Col, Row, Table } from 'antd'
+import axios from 'axios';
 import React, { useState } from 'react'
 
 function ListCV() {
     const [filteredData, setFilteredData] = useState([]);
+    const getListCV=()=>{
+        try {
+            // const res = await axios.get(`${APP_BASE}`)
+        } catch (error) {
+            
+        }
+    }
     const columns = [
         {
             title: 'Tên ứng viên',
             dataIndex: 'name',
             key: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
-        },
-        {
-            title: 'Vị trí ứng tuyển',
-            dataIndex: 'position',
-            key: 'position',
-            sorter: (a, b) => a.position.localeCompare(b.position),
         },
         {
             title: 'Email',
@@ -25,11 +27,6 @@ function ListCV() {
             title: 'Số điện thoại',
             dataIndex: 'phone',
             key: 'phone',
-        },
-        {
-            title: 'Kinh nghiệm',
-            dataIndex: 'experience',
-            key: 'experience',
         },
         {
             title: 'Ngày nộp',

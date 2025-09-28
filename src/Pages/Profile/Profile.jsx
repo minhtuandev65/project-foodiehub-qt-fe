@@ -27,7 +27,8 @@ import {
     WomanOutlined,
     CrownOutlined,
     CalendarOutlined,
-    ClockCircleOutlined
+    ClockCircleOutlined,
+    AccountBookOutlined
 } from '@ant-design/icons';
 import '../../assets/css/profile.css';
 import axios from 'axios';
@@ -109,14 +110,10 @@ const Profile = () => {
 
     return (
         <div className="login-page">
-            {/* Background decoration */}
-            <div className="bg-decoration">
-                <div className="decoration-item utensils-1">🍴</div>
-                <div className="decoration-item chef-hat">👨‍🍳</div>
-                <div className="decoration-item utensils-2">🥄</div>
-            </div>
+           
 
             <div className="login-container" style={{ maxWidth: 800 }}>
+                {/* <Button icon={<AccountBookOutlined />} style={{position: ''}}>Ứng tuyển</Button> */}
                 <Card className="login-card">
                     {/* Header Section */}
                     <div className="logo-section" style={{ marginBottom: 30 }}>
