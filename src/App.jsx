@@ -7,6 +7,8 @@ import StaffRoutes from "./Routes/StaffRoutes";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import Home from "./Pages/Home/Home";
 import Verification from "./Pages/Auth/Verification";
+import ManagerRoute from "./Routes/ManagerRoute";
+import ManagerLayout from "./Layout/ManagerLayout";
 
 function App() {
   const router = createBrowserRouter([
@@ -17,6 +19,10 @@ function App() {
     {
       element: <StaffLayout />,
       children: StaffRoutes,
+    },
+     {
+      element: <ManagerLayout />,
+      children: ManagerRoute,
     }
   ])
   return <RouterProvider router={router} />;
