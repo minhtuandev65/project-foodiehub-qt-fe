@@ -1,6 +1,6 @@
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Table, Typography } from 'antd'
-import React, { useState } from 'react'
+import { Button, Card, Col, Row, Space, Table, Typography, Tag } from 'antd'
+import React, { useEffect, useState } from 'react'
 import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes';
 import { API_BASE_URL } from '../../../settings/config';
 import axios from 'axios';
@@ -9,6 +9,7 @@ function ListRestaurant() {
   const [filteredData, setFilteredData] = useState([]);
   const [open, setOpen] = useState(false)
   const [loadingCreate, setLoadingCreate] = useState(false)
+  const token = localStorage.getItem('token')
   const columns = [
     {
       title: 'Tên nhà hàng',
@@ -17,8 +18,16 @@ function ListRestaurant() {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
+      title: 'Logo',
+      dataIndex: 'logoURL',
+      key: 'position',
+      render: (text, record, index) => {
+        return <img src={'https://project-foodiehub-qt.s3.us-east-1.amazonaws.com/466774955_961565079332834_7740637606180912254_n.jpg/b986013a-1da5-4de3-90b9-1e5ebf9a1794'} alt="" />
+      }
+    },
+    {
       title: 'Địa chỉ',
-      dataIndex: 'position',
+      dataIndex: 'address',
       key: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
     },
@@ -63,7 +72,11 @@ function ListRestaurant() {
   const handleSubmit = async (value) => {
     setLoadingCreate(true)
     try {
-      const res = await axios.post(`${API_BASE_URL}/v1/api/clients/manager/restaurant/createNewRestaurant`, value)
+      const res = await axios.post(`${API_BASE_URL}/v1/api/clients/manager/restaurant/createNewRestaurant`, value, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
       console.log(res?.data)
     } catch (error) {
       console.log(error)
@@ -71,6 +84,25 @@ function ListRestaurant() {
       setLoadingCreate(false)
     }
   }
+
+  const getListRes = async () => {
+    try {
+      const res = await axios.get(`${API_BASE_URL}/v1/api/clients/manager/restaurant/getListRestaurant`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      )
+      setFilteredData(res?.data?.data?.restaurantList)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getListRes()
+  }, [])
 
   return (
     <Row className='mt-0 me-0 mt-5'>

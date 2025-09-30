@@ -26,7 +26,7 @@ function ModalAddRes({ open, onCancel, onSubmit }) {
         { label: 'Thứ 7', value: 6 },
         { label: 'Chủ nhật', value: 0}
     ]
-
+console.log(logoFile)
     // Xử lý submit form
     const handleSubmit = async (values) => {
         try {
@@ -37,9 +37,10 @@ function ModalAddRes({ open, onCancel, onSubmit }) {
                 ...values,
                 openTime: values.openTime ? values.openTime.format('HH:mm') : null,
                 closeTime: values.closeTime ? values.closeTime.format('HH:mm') : null,
-                logoURL: logoFile[0] || null,
-                businessCertificateImage: businessCertificateImageFile[0] || null,
-                businessCertificateFile: businessCertificateDocFile[0] || null
+                logoURL: logoFile[0]?.originFileObj || null,
+                businessCertificateImage: businessCertificateImageFile[0]?.originFileObj
+ || null,
+                businessCertificateFile: businessCertificateDocFile[0]?.originFileObj || null
             }
 
             await onSubmit(formattedValues)
