@@ -29,33 +29,26 @@ import showMessage from '../../Helper/showMessage';
 import { API_BASE_URL } from '../../settings/config'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from 'react-redux';
+import { handelLogin } from '../../redux/reducer/modules/AuthReducer';
 
 const { Title, Text } = Typography;
 
 const LoginPage = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+  const { loadingLogin } = useSelector((state) => state.auth)
+  console.log(loadingLogin)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const onFinish = async (values) => {
-    setLoading(true);
-    try {
-      // Simulate API call
-      const response = await axios.post(`${API_BASE_URL}/v1/api/auth/login`,
-        {
-          email: values.email,
-          password: values.password,
-        }
-      );
-      localStorage.setItem('token', response?.data?.data?.accessToken)
-      showMessage(response?.data?.message, 'success')
+    const result = await dispatch(handelLogin(values))
+    if (result?.payload?.status == 'success') {
       navigate('/home')
-
-    } catch (error) {
-      console.error(error?.response?.data?.message)
-    } finally {
-      setLoading(false);
+      showMessage(result?.payload?.message, 'success')
+    } else {
+      console.log("Login failed:", result.payload);
     }
   };
 
@@ -153,7 +146,7 @@ const LoginPage = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={loading}
+                loading={loadingLogin}
                 className="submit-button"
                 block
               >
