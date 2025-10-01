@@ -1,18 +1,40 @@
-import { Form, Input, Modal, Button, Upload, TimePicker, Select, message } from 'antd'
+import { Form, Input, Modal, Button, Upload, TimePicker, Select, message, Image } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { handleCreateNewRestaurant } from '../../../redux/reducer/modules/ManagerReducer'
+import { API_BASE_URL } from '../../../settings/config'
 
 const { TextArea } = Input
 const { Option } = Select
 
-function ModalAddRes({ open, onCancel, itemEdit }) {
+function ModalAddRes({ open, onCancel }) {
+    const {itemDetail}= useSelector((state)=>state.manager)
+    console.log(itemDetail)
     const [form] = useForm()
     const [loading, setLoading] = useState(false)
     // const {}
     const dispatch = useDispatch()
+
+    useEffect(()=>{
+        if(itemDetail?._id){
+            form.setFieldValue('phone', itemDetail?.phone)
+            form.setFieldValue('name', itemDetail?.name)
+            form.setFieldValue('description', itemDetail?.description)
+            form.setFieldValue('address', itemDetail?.address)
+            form.setFieldValue('openDays', itemDetail?.openDays)
+            if(itemDetail?.logoURL){
+                setLogoFile(itemDetail?.logoURL)
+            }
+            if(itemDetail?.businessCertificateImageKey){
+                setBusinessCertificateImageFile(itemDetail?.businessCertificateImageKey)
+            }
+            if(itemDetail?.businessCertificateFileKey){
+                setBusinessCertificateDocFile(itemDetail?.businessCertificateFileKey)
+            }
+        }
+    },[itemDetail?._id])
 
     // States để lưu ảnh upload
     const [logoFile, setLogoFile] = useState([])
@@ -176,7 +198,7 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
 
     return (
         <Modal
-            title="Thêm nhà hàng mới"
+            title="Chi tiết nhà hàng"
             open={open}
             onCancel={handleCancel}
             footer={[
@@ -326,8 +348,8 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
                     label="Logo nhà hàng"
                     name="logoURL"
                 >
-                    <Upload
-                        disabled={itemEdit ? true : false}
+                    {/* <Upload
+                        disabled={true }
                         {...uploadProps}
                         listType="picture-card"
                         fileList={logoFile}
@@ -340,7 +362,8 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
                                 <div style={{ marginTop: 8 }}>Tải lên Logo</div>
                             </div>
                         )}
-                    </Upload>
+                    </Upload> */}
+                    <Image src={logoFile} width={100} alt="" />
                 </Form.Item>
 
                 {/* Giấy chứng nhận kinh doanh (hình ảnh) */}
@@ -348,21 +371,7 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
                     label="Hình ảnh giấy chứng nhận kinh doanh"
                     name="businessCertificateImage"
                 >
-                    <Upload
-                        disabled={itemEdit ? true : false}
-                        {...uploadProps}
-                        listType="picture-card"
-                        fileList={businessCertificateImageFile}
-                        beforeUpload={handleBusinessCertImageUpload}
-                        onRemove={() => setBusinessCertificateImageFile([])}
-                    >
-                        {businessCertificateImageFile.length === 0 && (
-                            <div>
-                                <PlusOutlined />
-                                <div style={{ marginTop: 8 }}>Tải lên hình ảnh</div>
-                            </div>
-                        )}
-                    </Upload>
+                     <Image src={businessCertificateDocFile} width={100} alt="" />
                 </Form.Item>
 
                 {/* File giấy chứng nhận kinh doanh */}
@@ -370,15 +379,7 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
                     label="File giấy chứng nhận kinh doanh"
                     name="businessCertificateFile"
                 >
-                    <Upload
-                        disabled={itemEdit ? true : false}
-                        {...fileUploadProps}
-                        fileList={businessCertificateDocFile}
-                        beforeUpload={handleBusinessCertFileUpload}
-                        onRemove={() => setBusinessCertificateDocFile([])}
-                    >
-                        <Button icon={<UploadOutlined />}>Tải lên file</Button>
-                    </Upload>
+                    <a href={businessCertificateDocFile} target="_blank" rel="noopener noreferrer">{businessCertificateDocFile}</a>
                 </Form.Item>
             </Form>
         </Modal>

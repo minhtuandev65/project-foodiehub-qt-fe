@@ -1,14 +1,17 @@
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Table, Typography } from 'antd'
-import React, { useState } from 'react'
+import { DeleteFilled, EditFilled, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row, Space, Table, Typography, Tag } from 'antd'
+import React, { useEffect, useState } from 'react'
 import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes';
+import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRes';
 import { API_BASE_URL } from '../../../settings/config';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { handelGetRestaurant, handleSeeDetailRes } from '../../../redux/reducer/modules/ManagerReducer';
 
 function ListRestaurant() {
-  const [filteredData, setFilteredData] = useState([]);
+  const { listRes } = useSelector((state) => state.manager)
   const [open, setOpen] = useState(false)
-  const [loadingCreate, setLoadingCreate] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  const dispatch = useDispatch()
   const columns = [
     {
       title: 'Tên nhà hàng',
@@ -17,8 +20,16 @@ function ListRestaurant() {
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
+      title: 'Logo',
+      dataIndex: 'logoURL',
+      key: 'position',
+      render: (text, record, index) => {
+        return <img style={{ width: 50, height: 'auto' }} src={record?.logoURL} alt="" />
+      }
+    },
+    {
       title: 'Địa chỉ',
-      dataIndex: 'position',
+      dataIndex: 'address',
       key: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
     },
@@ -47,30 +58,31 @@ function ListRestaurant() {
     {
       title: 'Thao tác',
       key: 'action',
-      render: () => (
-        <Space size="middle">
-          <Button type="primary" size="small">Xem</Button>
-          <Button type="default" size="small">Sửa</Button>
+      render: (text, record, index) => {
+        return <Space size="middle">
+          <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => { handleDetail (record?._id) }}></Button>
+          <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
         </Space>
-      ),
+      }
     },
   ];
 
   const handleCancel = () => {
     setOpen(false)
   }
-
-  const handleSubmit = async (value) => {
-    setLoadingCreate(true)
-    try {
-      const res = await axios.post(`${API_BASE_URL}/v1/api/clients/manager/restaurant/createNewRestaurant`, value)
-      console.log(res?.data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoadingCreate(false)
-    }
+  const handleCancelEdit = () => {
+    setOpenEdit(false)
   }
+
+  const handleDetail=async(id)=>{
+    dispatch(handleSeeDetailRes(id))
+    setOpenEdit(true)
+  }
+
+
+  useEffect(() => {
+    dispatch(handelGetRestaurant())
+  }, [])
 
   return (
     <Row className='mt-0 me-0 mt-5'>
@@ -79,12 +91,12 @@ function ListRestaurant() {
           <Row>
             <Col span={24} className='d-flex justify-content-between'>
               <Typography.Title level={4}>Danh sách nhà hàng</Typography.Title>
-              <Button onClick={() => { setOpen(true) }} loading={loadingCreate} icon={<PlusCircleOutlined />}>Thêm nhà hàng</Button>
+              <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>Thêm nhà hàng</Button>
             </Col>
             <Col span={24} >
               <Table
                 columns={columns}
-                dataSource={filteredData}
+                dataSource={listRes}
                 pagination={{
                   pageSize: 10,
                   showSizeChanger: true,
@@ -98,7 +110,8 @@ function ListRestaurant() {
           </Row>
         </Card>
       </Col>
-      <ModalAddRes open={open} onCancel={handleCancel} onSubmit={handleSubmit} />
+      <ModalAddRes open={open} onCancel={handleCancel} />
+      <ModalEditRes open={openEdit} onCancel={handleCancelEdit}/>
     </Row>
   )
 }
