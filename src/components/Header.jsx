@@ -48,7 +48,7 @@ function Header() {
             key: 'manager',
             label: <Typography.Text onClick={() => { navigate(`/${ManagerPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản lý</Typography.Text>
         },
-        profileData?.role == 1 && {
+        profileData?.role == 'ADMIN' && {
             key: 'admin',
             label: <Typography.Text onClick={() => { navigate(`/${AdminPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản trị</Typography.Text>
         },
