@@ -1,17 +1,17 @@
-import { DeleteFilled, EditFilled, PlusCircleOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Row, Space, Table, Typography, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes';
 import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRes';
-import { API_BASE_URL } from '../../../settings/config';
 import { useDispatch, useSelector } from 'react-redux';
-import { handelGetRestaurant, handleSeeDetailRes } from '../../../redux/reducer/modules/ManagerReducer';
+import { handelGetRestaurant, handleAcceptRestaurant } from '../../../redux/reducer/modules/AdminReducer';
 
 function ListRestaurant() {
-  const { listRes } = useSelector((state) => state.manager)
+  const { loadingAccept, listRes } = useSelector((state) => state.admin)
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const dispatch = useDispatch()
+  const [itemAccept, setItemAccept] = useState(false)
   const columns = [
     {
       title: 'Tên nhà hàng',
@@ -36,7 +36,7 @@ function ListRestaurant() {
     {
       title: 'Ngày tạo',
       dataIndex: 'createdAt',
-      key: 'submitDate',
+      key: 'createdAt',
     },
     {
       title: 'Trạng thái',
@@ -59,8 +59,11 @@ function ListRestaurant() {
       key: 'action',
       render: (text, record) => {
         return <Space size="middle">
-          <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => { handleDetail (record?._id) }}></Button>
-          <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
+          <Button loading={loadingAccept && record?._id == itemAccept} type="text" size="small" icon={<CheckOutlined style={{ color: 'green' }} />} onClick={async () => {
+            handleAccept(record?._id)
+             setItemAccept(record?._id)
+          }}>Duyệt</Button>
+          <Button type="dashed" size="small" icon={<CloseOutlined style={{ color: 'red' }} />}>Từ chối</Button>
         </Space>
       }
     },
@@ -73,10 +76,15 @@ function ListRestaurant() {
     setOpenEdit(false)
   }
 
-  const handleDetail=async(id)=>{
-    dispatch(handleSeeDetailRes(id))
-    setOpenEdit(true)
+
+  const handleAccept = async (id) => {
+    const result = await dispatch(handleAcceptRestaurant(id))
+   
+    if (result?.payload?.data?.status == 'success') {
+      dispatch(handelGetRestaurant())
+    }
   }
+
 
 
   useEffect(() => {
@@ -110,7 +118,7 @@ function ListRestaurant() {
         </Card>
       </Col>
       <ModalAddRes open={open} onCancel={handleCancel} />
-      <ModalEditRes open={openEdit} onCancel={handleCancelEdit}/>
+      <ModalEditRes open={openEdit} onCancel={handleCancelEdit} />
     </Row>
   )
 }

@@ -8,6 +8,7 @@ import StaffPaths from '../Paths/StaffPaths';
 import axios from 'axios';
 import { API_BASE_URL } from '../settings/config';
 import ManagerPaths from '../Paths/ManagerPaths';
+import AdminPaths from '../Paths/AdminPaths';
 
 function Header() {
     const profileData = useSelector((state) => state.staff.user);
@@ -43,14 +44,18 @@ function Header() {
             key: 'profile',
             label: <Typography.Text onClick={() => { navigate(StaffPaths.PROFILE) }}><UserOutlined className='me-2' />Hồ sở của bạn</Typography.Text>
         },
-        {
+        profileData?.role == 'MANAGER' && {
             key: 'manager',
             label: <Typography.Text onClick={() => { navigate(`/${ManagerPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản lý</Typography.Text>
+        },
+        profileData?.role == 1 && {
+            key: 'admin',
+            label: <Typography.Text onClick={() => { navigate(`/${AdminPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản trị</Typography.Text>
         },
     ]
     const navigate = useNavigate()
     return (
-        <Row id='header' style={{background: 'rgba(0,0,0,0.08)'}} className={!isAtTop ? 'header-scroll' : ''}>
+        <Row id='header' style={{ background: 'rgba(0,0,0,0.08)' }} className={!isAtTop ? 'header-scroll' : ''}>
             <Col span={24}>
                 <Row className='w-100'>
                     <Col span={6}>
