@@ -1,42 +1,49 @@
-import { Form, Input, Modal, Button, Upload, TimePicker, Select, message, Image } from 'antd'
+import { Form, Input, Modal, Button, Upload, TimePicker, Select, Image } from 'antd'
 import { useForm } from 'antd/es/form/Form'
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { handleCreateNewRestaurant } from '../../../redux/reducer/modules/ManagerReducer'
+import { handleEditRestaurant } from '../../../redux/reducer/modules/ManagerReducer'
 import { API_BASE_URL } from '../../../settings/config'
+import dayjs from 'dayjs'
 
 const { TextArea } = Input
 const { Option } = Select
 
 function ModalAddRes({ open, onCancel }) {
-    const {itemDetail}= useSelector((state)=>state.manager)
-    console.log(itemDetail)
+    const { itemDetail, loadingEdit } = useSelector((state) => state.manager)
     const [form] = useForm()
-    const [loading, setLoading] = useState(false)
-    // const {}
     const dispatch = useDispatch()
 
-    useEffect(()=>{
-        if(itemDetail?._id){
+    useEffect(() => {
+        if (itemDetail?._id) {
             form.setFieldValue('phone', itemDetail?.phone)
             form.setFieldValue('name', itemDetail?.name)
             form.setFieldValue('description', itemDetail?.description)
             form.setFieldValue('address', itemDetail?.address)
             form.setFieldValue('openDays', itemDetail?.openDays)
-            if(itemDetail?.logoURL){
+            form.setFieldValue('email', itemDetail?.email)
+
+            if (itemDetail?.openTime) {
+                form.setFieldValue("openTime", dayjs(itemDetail.openTime, "HH:mm"))
+            }
+            if (itemDetail?.closeTime) {
+                form.setFieldValue("closeTime", dayjs(itemDetail.closeTime, "HH:mm"))
+            }
+            // form.setFieldValue('openTime', itemDetail?.openTime)
+            // form.setFieldValue('closeTime', itemDetail?.closeTime)
+            if (itemDetail?.logoURL) {
                 setLogoFile(itemDetail?.logoURL)
             }
-            if(itemDetail?.businessCertificateImageKey){
+            if (itemDetail?.businessCertificateImageKey) {
                 setBusinessCertificateImageFile(itemDetail?.businessCertificateImageKey)
             }
-            if(itemDetail?.businessCertificateFileKey){
+            if (itemDetail?.businessCertificateFileKey) {
                 setBusinessCertificateDocFile(itemDetail?.businessCertificateFileKey)
             }
         }
-    },[itemDetail?._id])
+    }, [itemDetail?._id])
 
-    // States để lưu ảnh upload
     const [logoFile, setLogoFile] = useState([])
     const [businessCertificateImageFile, setBusinessCertificateImageFile] = useState([])
     const [businessCertificateDocFile, setBusinessCertificateDocFile] = useState([])
@@ -53,7 +60,6 @@ function ModalAddRes({ open, onCancel }) {
     ]
     const handleSubmit = async (values) => {
         try {
-            setLoading(true);
 
             const formData = new FormData();
 
@@ -98,15 +104,14 @@ function ModalAddRes({ open, onCancel }) {
             }
 
             for (let [key, value] of formData.entries()) {
-                console.log(key, value)
+                // console.log(key, value)
             }
-            dispatch(handleCreateNewRestaurant(formData))
+            await dispatch(handleEditRestaurant({id: itemDetail?._id, values: formData}))
+            onCancel()
 
         } catch (error) {
             console.log(error)
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
 
@@ -120,81 +125,6 @@ function ModalAddRes({ open, onCancel }) {
         onCancel()
     }
 
-    // Custom upload handlers
-    const handleLogoUpload = (file) => {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            const fileObj = {
-                uid: Date.now().toString(),
-                name: file.name,
-                status: 'done',
-                url: e.target.result,
-                originFileObj: file
-            }
-            setLogoFile([fileObj])
-        }
-        reader.readAsDataURL(file)
-        return false // Prevent default upload behavior
-    }
-
-    const handleBusinessCertImageUpload = (file) => {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            const fileObj = {
-                uid: Date.now().toString(),
-                name: file.name,
-                status: 'done',
-                url: e.target.result,
-                originFileObj: file
-            }
-            setBusinessCertificateImageFile([fileObj])
-        }
-        reader.readAsDataURL(file)
-        return false
-    }
-
-    const handleBusinessCertFileUpload = (file) => {
-        const fileObj = {
-            uid: Date.now().toString(),
-            name: file.name,
-            status: 'done',
-            originFileObj: file
-        }
-        setBusinessCertificateDocFile([fileObj])
-        return false
-    }
-
-    // Props cho upload
-    const uploadProps = {
-        beforeUpload: (file) => {
-            const isImage = file.type.startsWith('image/')
-            if (!isImage) {
-                message.error('Chỉ được tải lên file hình ảnh!')
-                return false
-            }
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isLt2M) {
-                message.error('Hình ảnh phải nhỏ hơn 2MB!')
-                return false
-            }
-            return true
-        },
-        maxCount: 1,
-        onRemove: () => true
-    }
-
-    const fileUploadProps = {
-        beforeUpload: (file) => {
-            const isLt5M = file.size / 1024 / 1024 < 5
-            if (!isLt5M) {
-                message.error('File phải nhỏ hơn 5MB!')
-                return false
-            }
-            return true
-        },
-        maxCount: 1,
-        onRemove: () => true
-    }
 
     return (
         <Modal
@@ -208,10 +138,10 @@ function ModalAddRes({ open, onCancel }) {
                 <Button
                     key="submit"
                     type="primary"
-                    loading={loading}
+                    loading={loadingEdit}
                     onClick={() => form.submit()}
                 >
-                    Thêm nhà hàng
+                    Cập nhật nhà hàng
                 </Button>
             ]}
             width={800}
@@ -371,7 +301,7 @@ function ModalAddRes({ open, onCancel }) {
                     label="Hình ảnh giấy chứng nhận kinh doanh"
                     name="businessCertificateImage"
                 >
-                     <Image src={businessCertificateDocFile} width={100} alt="" />
+                    <Image src={businessCertificateImageFile} width={100} alt="" />
                 </Form.Item>
 
                 {/* File giấy chứng nhận kinh doanh */}
@@ -379,7 +309,7 @@ function ModalAddRes({ open, onCancel }) {
                     label="File giấy chứng nhận kinh doanh"
                     name="businessCertificateFile"
                 >
-                    <a href={businessCertificateDocFile} target="_blank" rel="noopener noreferrer">{businessCertificateDocFile}</a>
+                    <a href={businessCertificateDocFile} style={{ whiteSpace: 'nowrap', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }} target="_blank" rel="noopener noreferrer">{businessCertificateDocFile}</a>
                 </Form.Item>
             </Form>
         </Modal>

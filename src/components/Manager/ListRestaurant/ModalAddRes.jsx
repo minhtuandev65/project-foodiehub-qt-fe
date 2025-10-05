@@ -2,7 +2,7 @@ import { Form, Input, Modal, Button, Upload, TimePicker, Select, message } from 
 import { useForm } from 'antd/es/form/Form'
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { handleCreateNewRestaurant } from '../../../redux/reducer/modules/ManagerReducer'
 
 const { TextArea } = Input
@@ -10,7 +10,7 @@ const { Option } = Select
 
 function ModalAddRes({ open, onCancel, itemEdit }) {
     const [form] = useForm()
-    const [loading, setLoading] = useState(false)
+    const {loadingCreate}= useSelector((state)=> state.manager)
     // const {}
     const dispatch = useDispatch()
 
@@ -31,7 +31,6 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
     ]
     const handleSubmit = async (values) => {
         try {
-            setLoading(true);
 
             const formData = new FormData();
 
@@ -76,15 +75,14 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
             }
 
             for (let [key, value] of formData.entries()) {
-                console.log(key, value)
+                // console.log(key, value)
             }
-            dispatch(handleCreateNewRestaurant(formData))
+           await dispatch(handleCreateNewRestaurant(formData))
+           onCancel()
 
         } catch (error) {
             console.log(error)
-        } finally {
-            setLoading(false);
-        }
+        } 
     };
 
 
@@ -186,7 +184,7 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
                 <Button
                     key="submit"
                     type="primary"
-                    loading={loading}
+                    loading={loadingCreate}
                     onClick={() => form.submit()}
                 >
                     Thêm nhà hàng

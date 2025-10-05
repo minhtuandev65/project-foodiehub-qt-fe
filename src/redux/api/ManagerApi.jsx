@@ -10,8 +10,9 @@ export const createNewRestaurant=async(value)=>{
     return res
 }
 
-export const editRestaurant= async()=>{
-    const res = instance.put
+export const editRestaurant= async(id, values)=>{
+    const res = instance.put(`/v1/api/clients/manager/restaurant/${id}/update`, values)
+    return res
 }
 export const detailRestaurant=async(id)=>{
     const res = instance.get(`/v1/api/clients/manager/restaurant/getDetailRestaurant/${id}/detail`)
