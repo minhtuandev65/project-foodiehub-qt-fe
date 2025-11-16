@@ -2,15 +2,18 @@ import { Form, Input, Modal, Button, Upload, TimePicker, Select, message } from 
 import { useForm } from 'antd/es/form/Form'
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import React, { useState } from 'react'
-import dayjs from 'dayjs'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleCreateNewRestaurant } from '../../../redux/reducer/modules/ManagerReducer'
 
 const { TextArea } = Input
 const { Option } = Select
 
-function ModalAddRes({ open, onCancel, onSubmit }) {
+function ModalAddRes({ open, onCancel, itemEdit }) {
     const [form] = useForm()
-    const [loading, setLoading] = useState(false)
-    
+    const {loadingCreate}= useSelector((state)=> state.manager)
+    // const {}
+    const dispatch = useDispatch()
+
     // States để lưu ảnh upload
     const [logoFile, setLogoFile] = useState([])
     const [businessCertificateImageFile, setBusinessCertificateImageFile] = useState([])
@@ -24,37 +27,64 @@ function ModalAddRes({ open, onCancel, onSubmit }) {
         { label: 'Thứ 5', value: 4 },
         { label: 'Thứ 6', value: 5 },
         { label: 'Thứ 7', value: 6 },
-        { label: 'Chủ nhật', value: 0}
+        { label: 'Chủ nhật', value: 0 }
     ]
-console.log(logoFile)
-    // Xử lý submit form
     const handleSubmit = async (values) => {
         try {
-            setLoading(true)
-            
-            // Format thời gian
-            const formattedValues = {
-                ...values,
-                openTime: values.openTime ? values.openTime.format('HH:mm') : null,
-                closeTime: values.closeTime ? values.closeTime.format('HH:mm') : null,
-                logoURL: logoFile[0]?.originFileObj || null,
-                businessCertificateImage: businessCertificateImageFile[0]?.originFileObj
- || null,
-                businessCertificateFile: businessCertificateDocFile[0]?.originFileObj || null
+
+            const formData = new FormData();
+
+            // Format thời gian và append
+            if (values.openTime) {
+                formData.append("openTime", values.openTime.format("HH:mm"));
+            }
+            if (values.closeTime) {
+                formData.append("closeTime", values.closeTime.format("HH:mm"));
             }
 
-            await onSubmit(formattedValues)
-            form.resetFields()
-            // Reset các state chứa file
-            // setLogoFile([])
-            // setBusinessCertificateImageFile([])
-            // setBusinessCertificateDocFile([])
+            // Append các field khác (text input, select...)
+            Object.keys(values).forEach((key) => {
+                if (key !== "openTime" && key !== "closeTime") {
+                    if (key !== "logoURL" && key !== "businessCertificateImage" && key !== "businessCertificateFile") {
+                        if (Array.isArray(values[key])) {
+                            values[key].forEach((item) => {
+                                formData.append(`${key}[]`, item)
+                            })
+                        } else {
+                            formData.append(key, values[key])
+                        }
+                    }
+                }
+            })
+
+            // Append file
+            if (logoFile[0]?.originFileObj) {
+                formData.append("logoURL", logoFile[0].originFileObj);
+            }
+            if (businessCertificateImageFile[0]?.originFileObj) {
+                formData.append(
+                    "businessCertificateImage",
+                    businessCertificateImageFile[0].originFileObj
+                );
+            }
+            if (businessCertificateDocFile[0]?.originFileObj) {
+                formData.append(
+                    "businessCertificateFile",
+                    businessCertificateDocFile[0].originFileObj
+                );
+            }
+
+            for (let [key, value] of formData.entries()) {
+                // console.log(key, value)
+            }
+           await dispatch(handleCreateNewRestaurant(formData))
+           onCancel()
+
         } catch (error) {
-            message.error('Có lỗi xảy ra, vui lòng thử lại!')
-        } finally {
-            setLoading(false)
-        }
-    }
+            console.log(error)
+        } 
+    };
+
 
     // Xử lý đóng modal
     const handleCancel = () => {
@@ -154,7 +184,7 @@ console.log(logoFile)
                 <Button
                     key="submit"
                     type="primary"
-                    loading={loading}
+                    loading={loadingCreate}
                     onClick={() => form.submit()}
                 >
                     Thêm nhà hàng
@@ -295,6 +325,7 @@ console.log(logoFile)
                     name="logoURL"
                 >
                     <Upload
+                        disabled={itemEdit ? true : false}
                         {...uploadProps}
                         listType="picture-card"
                         fileList={logoFile}
@@ -316,6 +347,7 @@ console.log(logoFile)
                     name="businessCertificateImage"
                 >
                     <Upload
+                        disabled={itemEdit ? true : false}
                         {...uploadProps}
                         listType="picture-card"
                         fileList={businessCertificateImageFile}
@@ -337,6 +369,7 @@ console.log(logoFile)
                     name="businessCertificateFile"
                 >
                     <Upload
+                        disabled={itemEdit ? true : false}
                         {...fileUploadProps}
                         fileList={businessCertificateDocFile}
                         beforeUpload={handleBusinessCertFileUpload}

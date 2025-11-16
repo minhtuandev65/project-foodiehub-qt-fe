@@ -5,12 +5,15 @@ import Header from '../components/Header'
 import { Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getProfile } from '../redux/reducer/modules/StaffReducer'
+import Cookies from 'js-cookie';
 
 function StaffLayout() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getProfile())
+        if(Cookies.get('access_token')){
+            dispatch(getProfile())
+        }
     }, [])
     
     return (

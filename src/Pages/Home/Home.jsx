@@ -6,13 +6,15 @@ import 'swiper/css';
 import 'swiper/css/effect-fade'
 import 'swiper/css/pagination';
 import '../../assets/css/homepage.css'
+import Cookies from 'js-cookie';
+import HomeAuth from './HomeAuth/HomeAuth';
+import HomeNotAuth from './HomeNotAuth/HomeNotAuth';
 
 function Home() {
-    console.log(123456)
     return (
         <Row id='home-page'>
-            <Col span={24} className='px-0' style={{paddingLeft:'0 !important', paddingRight:'0 !important'}}>
-                <Swiper style={{ width: '100%', borderRadius: 8, height:'100vh' }}
+            <Col span={24} className='px-0' style={{height:'100vh'}}>
+                <Swiper className='w-100' style={{height:'100vh'}}
                     modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade]}
                     effect={'fade'}
                     autoplay={{
@@ -23,16 +25,21 @@ function Home() {
                     slidesPerView={1}
                     pagination={{ clickable: true }}
                 >
-                    <SwiperSlide >
-                        <img src='/images/banner.png' className='w-100' alt="" />
+                    <SwiperSlide className='w-100 h-100' >
+                        <img className='w-100 h-100' src='/images/banner.png'  alt="" />
                     </SwiperSlide>
-                    <SwiperSlide >
-                        <img src='/images/banner.png' className='w-100' alt="" />
+                    <SwiperSlide className='w-100 h-100'>
+                       <img className='w-100 h-100' src='/images/banner.png'  alt="" />
                     </SwiperSlide>
-                    <SwiperSlide >
-                        <img src='/images/banner.png' className='w-100' alt="" />
+                    <SwiperSlide className='w-100 h-100'>
+                        <img className='w-100 h-100' src='/images/banner.png'  alt="" />
                     </SwiperSlide>
                 </Swiper>
+            </Col>
+            <Col span={24}>
+                    {
+                        Cookies.get('access_token') ? <HomeAuth/> : <HomeNotAuth/>
+                    }
             </Col>
         </Row>
     )

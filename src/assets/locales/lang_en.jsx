@@ -42,7 +42,14 @@ const lang_en = {
   confirm_password_mismatch: "Passwords do not match!",
   agree_required: "You must agree with the terms!",
   register_failed: "Registration failed",
-  and:'and'
+  and: 'and',
+  restaurant_list: "Restaurant list",
+  logout: 'Log out',
+  my_profile: "My profile",
+  manager: 'Administrator permissions',
+  book_table: 'Book a table',
+  menu: 'Menu',
+  comment: 'Comment'
 };
 
 

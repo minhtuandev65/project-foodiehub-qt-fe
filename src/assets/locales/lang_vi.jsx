@@ -42,7 +42,14 @@
   confirm_password_mismatch: "Mật khẩu xác nhận không khớp!",
   agree_required: "Vui lòng đồng ý với điều khoản!",
   register_failed: "Đăng ký thất bại",
-  and:'và'
+  and:'và',
+  restaurant_list: "Danh sách nhà hàng",
+  logout: 'Đăng xuất',
+  my_profile: "Hồ sơ của tôi",
+  manager:'Quyền quản lý',
+  book_table: 'Đặt bàn',
+  menu:'Thực đơn',
+  comment:'Bình luận'
 };
 
 

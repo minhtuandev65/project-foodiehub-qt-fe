@@ -19,7 +19,6 @@ function MenuManager() {
     const onClick = e => {
         navigate(`${e?.key}`)
     };
-    console.log(window.location.pathname)
     return (
         <div style={{ width: 256, position: 'fixed', top: "30%", zIndex: 5 }}>
             <Button type="primary" onClick={toggleCollapsed} style={{ borderRadius: '0 15px 15px 0' }} >
