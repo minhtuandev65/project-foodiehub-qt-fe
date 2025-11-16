@@ -9,6 +9,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../settings/config';
 import ManagerPaths from '../Paths/ManagerPaths';
 import AdminPaths from '../Paths/AdminPaths';
+import { t } from 'i18next';
 
 function Header() {
     const profileData = useSelector((state) => state.staff.user);
@@ -38,19 +39,19 @@ function Header() {
     const menu = [
         {
             key: 'logout',
-            label: <Typography.Text onClick={handleLogout}><LogoutOutlined className='me-2' /> Đăng xuất</Typography.Text>
+            label: <Typography.Text onClick={handleLogout}><LogoutOutlined className='me-2' /> {t('logout')}</Typography.Text>
         },
         !window.location.pathname.includes('profile') && {
             key: 'profile',
-            label: <Typography.Text onClick={() => { navigate(StaffPaths.PROFILE) }}><UserOutlined className='me-2' />Hồ sở của bạn</Typography.Text>
+            label: <Typography.Text onClick={() => { navigate(StaffPaths.PROFILE) }}><UserOutlined className='me-2' />{t('my_profile')}</Typography.Text>
         },
-        profileData?.role == 'MANAGER' && {
+        profileData?.role == 2 && {
             key: 'manager',
-            label: <Typography.Text onClick={() => { navigate(`/${ManagerPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản lý</Typography.Text>
+            label: <Typography.Text onClick={() => { navigate(`/${ManagerPaths.GENERAL}`) }}><BookOutlined className='me-2' />{t('manager')}</Typography.Text>
         },
-        profileData?.role == 'ADMIN' && {
+        profileData?.role == 1 && {
             key: 'admin',
-            label: <Typography.Text onClick={() => { navigate(`/${AdminPaths.GENERAL}`) }}><BookOutlined className='me-2' />Quyền quản trị</Typography.Text>
+            label: <Typography.Text onClick={() => { navigate(`/${AdminPaths.GENERAL}`) }}><BookOutlined className='me-2' />{t('admin')}</Typography.Text>
         },
     ]
     const navigate = useNavigate()
@@ -85,12 +86,12 @@ function Header() {
                                     <Button className='me-3 button-header button-login' onClick={() => {
                                         navigate('/login')
                                     }}>
-                                        Đăng nhập
+                                        {t('login')}
                                     </Button>
                                     <Button className='button-header button-register' onClick={() => {
                                         navigate('/register')
                                     }}>
-                                        Đăng ký
+                                       {t('register')}
                                     </Button>
                                 </div>
                         }

@@ -15,7 +15,7 @@ instance.interceptors.response.use((response) => {
         if (error.response.status === 401) {
             Cookies.remove("access_token");
             Cookies.remove("user_id");
-            return window.location.href = '/login'
+            // return window.location.href = '/login'
         }
     return Promise.reject(error);
 });

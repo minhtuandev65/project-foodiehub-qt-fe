@@ -1,7 +1,7 @@
 import instance from '../../config/index'
 
 export const getListRestaurant=async()=>{
-    const res = instance.get('/v1/api/clients/manager/restaurant/getListRestaurant')
+    const res = instance.get('/v1/api/restaurant/manager/list')
     return res
 }
 
@@ -15,6 +15,6 @@ export const editRestaurant= async(id, values)=>{
     return res
 }
 export const detailRestaurant=async(id)=>{
-    const res = instance.get(`/v1/api/clients/manager/restaurant/getDetailRestaurant/${id}/detail`)
+    const res = instance.get(`/v1/api/restaurant/manager/${id}/detail`)
     return res
 }

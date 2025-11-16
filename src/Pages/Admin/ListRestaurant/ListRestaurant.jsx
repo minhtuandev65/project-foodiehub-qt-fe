@@ -1,4 +1,4 @@
-import { CheckOutlined, CloseOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Row, Space, Table, Typography, Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes';
@@ -43,14 +43,14 @@ function ListRestaurant() {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        let color = status === 'ACCEPT' ? 'green' : status === 'PENDING' ? 'orange' : 'red';
-        let text = status === 'ACCEPT' ? 'Đã duyệt' : status === 'PENDING' ? 'Chờ duyệt' : 'Từ chối';
+        let color = status === 1 ? 'green' : status === 2 ? 'orange' : 'red';
+        let text = status === 1 ? 'Đã duyệt' : status ===2 ? 'Chờ duyệt' : 'Từ chối';
         return <Tag color={color}>{text}</Tag>;
       },
       filters: [
-        { text: 'Đã duyệt', value: 'approved' },
-        { text: 'Chờ duyệt', value: 'pending' },
-        { text: 'Từ chối', value: 'rejected' },
+        { text: 'Đã duyệt', value: 1 },
+        { text: 'Chờ duyệt', value:2 },
+        { text: 'Từ chối', value: 3 },
       ],
       onFilter: (value, record) => record.status === value,
     },
@@ -59,11 +59,12 @@ function ListRestaurant() {
       key: 'action',
       render: (text, record) => {
         return <Space size="middle">
-          <Button loading={loadingAccept && record?._id == itemAccept} type="text" size="small" icon={<CheckOutlined style={{ color: 'green' }} />} onClick={async () => {
+          <Button disabled={record?.status==1} loading={loadingAccept && record?._id == itemAccept} type="text" size="small" icon={<CheckOutlined style={{ color: 'green' }} />} onClick={async () => {
             handleAccept(record?._id)
              setItemAccept(record?._id)
           }}>Duyệt</Button>
-          <Button type="dashed" size="small" icon={<CloseOutlined style={{ color: 'red' }} />}>Từ chối</Button>
+          <Button disabled={record?.status==3} type="dashed" size="small" icon={<CloseOutlined style={{ color: 'red' }} />}>Từ chối</Button>
+          <Button type="text" size="small" icon={<DeleteOutlined style={{ color: 'red' }} />}>Xóa</Button>
         </Space>
       }
     },

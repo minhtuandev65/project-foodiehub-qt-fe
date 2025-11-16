@@ -1,7 +1,7 @@
 import instance from "../../config"
 
 export const getListRestaurant=async()=>{
-    const res = await instance.get('/v1/api/admin/getListRestaurant')
+    const res = await instance.get('/v1/api/restaurant/admin/restaurants')
     return res
 }
 
