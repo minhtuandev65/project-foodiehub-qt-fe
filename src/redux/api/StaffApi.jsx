@@ -1,4 +1,6 @@
 import instance from "../../config"
+import Cookies from "js-cookie";
+
 
 export const getProfileApi = async () => {
     try {
@@ -9,7 +11,7 @@ export const getProfileApi = async () => {
     }
 }
 
-export const updateProfileApi= async(values)=>{
+export const updateProfileApi = async (values) => {
     try {
         const res = await instance.put('/v1/api/user/updateMyProfile', values)
         return res
@@ -18,10 +20,11 @@ export const updateProfileApi= async(values)=>{
     }
 }
 
-export const getListRestaurantApi= async(filter)=>{
-    const {page, limit}= filter
-    const res =await instance.get('/v1/api/restaurant/user/list',{
-        params:{
+export const getListRestaurantApi = async (filter) => {
+    const { page, limit } = filter
+    const token = Cookies.get('access_token');
+    const res = await instance.get(token ? '/v1/api/restaurant/user/list-logged-in' : '/v1/api/restaurant/user/list', {
+        params: {
             page,
             limit
         }
@@ -29,12 +32,17 @@ export const getListRestaurantApi= async(filter)=>{
     return res
 }
 
-export const getRestaurantDetailApi= async(id)=>{
-    const res =await instance.get(`/v1/api/restaurant/user/${id}`)
-    return res 
+export const getRestaurantDetailApi = async (id) => {
+    const res = await instance.get(`/v1/api/restaurant/user/${id}`)
+    return res
 }
 
-export const getListTableRestaurantApi= async(restaurantId)=>{
-    const res= await instance.get(`/v1/api/table/restaurant/${restaurantId}/getListTable?page=1&limit=10`)
+export const getListTableRestaurantApi = async (restaurantId) => {
+    const res = await instance.get(`/v1/api/table/restaurant/${restaurantId}/getListTable?page=1&limit=10`)
+    return res
+}
+
+export const likeRestaurantApi=async(id)=>{
+ const res = await instance.put(`/v1/api/favorites/${id}`)
     return res
 }

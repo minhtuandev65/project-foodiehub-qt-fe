@@ -49,7 +49,13 @@
   manager:'Quyền quản lý',
   book_table: 'Đặt bàn',
   menu:'Thực đơn',
-  comment:'Bình luận'
+  comment:'Bình luận',
+  table:'Bàn',
+  table_name: "Tên bàn",
+  table_category:'Loại bàn',
+  table_desc:'Mô tả',
+  table_capacity: "Sức chứa",
+  table_image: 'Hình ảnh'
 };
 
 

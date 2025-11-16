@@ -1,14 +1,16 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import * as  StaffApi from '../../api/StaffApi'
+import showMessage from '../../../Helper/showMessage';
 
 const initialState = {
     user: {},
-    restaurants:[],
-    loadingGetRestaurants:false,
+    restaurants: [],
+    loadingGetRestaurants: false,
     restaurantDetail: {},
-    loadingDetailRestaurant:false,
-    listTableRestaurant:[],
-    loadingGetTable: false
+    loadingDetailRestaurant: false,
+    listTableRestaurant: [],
+    loadingGetTable: false,
+    loadingLike: false
 }
 
 const StaffReducer = createSlice({
@@ -23,36 +25,57 @@ const StaffReducer = createSlice({
         builder.addCase(getProfile.fulfilled, (state, { payload }) => {
             state.user = payload;
         })
-         builder.addCase(getListRestaurant.pending, (state) => {
+        builder.addCase(getListRestaurant.pending, (state) => {
             state.loadingGetRestaurants = true;
         })
-         builder.addCase(getListRestaurant.fulfilled, (state, { payload }) => {
+        builder.addCase(getListRestaurant.fulfilled, (state, { payload }) => {
             state.restaurants = payload?.data?.data;
             state.loadingGetRestaurants = false;
         })
-         builder.addCase(getListRestaurant.rejected, (state) => {
-           state.loadingGetRestaurants = false;
+        builder.addCase(getListRestaurant.rejected, (state) => {
+            state.loadingGetRestaurants = false;
         })
         builder.addCase(getRestaurantDetail.pending, (state) => {
             state.loadingDetailRestaurant = true;
         })
-         builder.addCase(getRestaurantDetail.fulfilled, (state, { payload }) => {
+        builder.addCase(getRestaurantDetail.fulfilled, (state, { payload }) => {
             console.log(payload)
             state.restaurantDetail = payload?.data?.data;
             state.loadingGetRestaurants = false;
         })
-         builder.addCase(getRestaurantDetail.rejected, (state) => {
-           state.loadingDetailRestaurant = false;
+        builder.addCase(getRestaurantDetail.rejected, (state) => {
+            state.loadingDetailRestaurant = false;
         })
         builder.addCase(getListTableRestaurant.pending, (state) => {
             state.loadingGetTable = true;
         })
-         builder.addCase(getListTableRestaurant.fulfilled, (state, { payload }) => {
+        builder.addCase(getListTableRestaurant.fulfilled, (state, { payload }) => {
             state.listTableRestaurant = payload?.data?.data;
             state.loadingGetTable = false;
         })
-         builder.addCase(getListTableRestaurant.rejected, (state) => {
-           state.loadingGetTable = false;
+        builder.addCase(getListTableRestaurant.rejected, (state) => {
+            state.loadingGetTable = false;
+        })
+        builder.addCase(likeRestaurant.pending, (state) => {
+            state.loadingLike = true;
+        })
+        builder.addCase(likeRestaurant.fulfilled, (state, { payload }) => {
+            state.loadingLike = false;
+            if (payload?.data?.status == 'success') {
+                state.restaurants.restaurantList = state.restaurants.restaurantList?.map((item) => {
+                    if (payload?.data?.data?.restaurantId === item?._id) {
+                        return {
+                            ...item,
+                            favorite: true
+                        }
+                    }
+                    return item
+                })
+                showMessage(payload?.data?.message, 'success')
+            }
+        })
+        builder.addCase(likeRestaurant.rejected, (state) => {
+            state.loadingLike = false;
         })
     },
 });
@@ -62,23 +85,28 @@ export const getProfile = createAsyncThunk("staff/getProfile", async (dispatch) 
     return res?.data?.data
 })
 
-export const updateProfile= createAsyncThunk('staff/updateProfile', async (values)=>{
-    const res =await StaffApi.updateProfileApi(values)
+export const updateProfile = createAsyncThunk('staff/updateProfile', async (values) => {
+    const res = await StaffApi.updateProfileApi(values)
     return res
 })
 
-export const getListRestaurant=createAsyncThunk('staff/getListRestaurant', async (filter)=>{
+export const getListRestaurant = createAsyncThunk('staff/getListRestaurant', async (filter) => {
     const res = await StaffApi.getListRestaurantApi(filter);
     return res
 })
 
-export const getRestaurantDetail=createAsyncThunk('staff/getRestaurantDetail', async (id)=>{
+export const getRestaurantDetail = createAsyncThunk('staff/getRestaurantDetail', async (id) => {
     const res = await StaffApi.getRestaurantDetailApi(id);
     return res
 })
 
-export const getListTableRestaurant= createAsyncThunk('staff/getListTableRestaurant', async (restaurantId)=>{
+export const getListTableRestaurant = createAsyncThunk('staff/getListTableRestaurant', async (restaurantId) => {
     const res = await StaffApi.getListTableRestaurantApi(restaurantId);
+    return res
+})
+
+export const likeRestaurant = createAsyncThunk('staff/likeRestaurant', async (restaurantId) => {
+    const res = await StaffApi.likeRestaurantApi(restaurantId);
     return res
 })
 
