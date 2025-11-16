@@ -6,18 +6,26 @@ import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRe
 import { API_BASE_URL } from '../../../settings/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { handelGetRestaurant, handleSeeDetailRes } from '../../../redux/reducer/modules/ManagerReducer';
+import { Link, useNavigate } from 'react-router-dom';
+import ManagerPaths from '../../../Paths/ManagerPaths';
 
 function ListRestaurant() {
   const { listRes } = useSelector((state) => state.manager)
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const columns = [
     {
       title: 'Tên nhà hàng',
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
+      render:(text, record)=>{
+        return <Typography.Text style={{cursor:'pointer'}} onClick={()=>{
+          navigate(`/${ManagerPaths.RES_DETAIL.replace(':restaurantId', record?._id)}`)
+        }} >{record?.name}</Typography.Text>
+      }
     },
     {
       title: 'Logo',

@@ -4,7 +4,7 @@ import { Content } from 'antd/es/layout/layout';
 import { Fade, Slide, Zoom } from 'react-awesome-reveal';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListRestaurant } from '../../../redux/reducer/modules/StaffReducer';
+import { getListRestaurant, likeRestaurant } from '../../../redux/reducer/modules/StaffReducer';
 import CardRes from '../../../components/Staff/CardRes';
 import { t } from 'i18next';
 
@@ -16,6 +16,7 @@ function HomeNotAuth() {
     dispatch(getListRestaurant(filter))
   }, [filter?.limit, filter?.page])
 
+console.log(restaurants?.restaurantList)
 
   return (
     <Layout className='w-100 bg-white'>

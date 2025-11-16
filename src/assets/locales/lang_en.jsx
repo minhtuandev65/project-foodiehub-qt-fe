@@ -46,10 +46,16 @@ const lang_en = {
   restaurant_list: "Restaurant list",
   logout: 'Log out',
   my_profile: "My profile",
-  manager: 'Administrator permissions',
+  manager: 'Manager',
   book_table: 'Book a table',
   menu: 'Menu',
-  comment: 'Comment'
+  comment: 'Comment',
+  table: 'Table',
+  table_name: "Table Name",
+  table_category: 'Table Type',
+  table_desc: 'Description',
+  table_capacity: "Capacity",
+  table_image: 'Image'
 };
 
 

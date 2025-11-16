@@ -1,12 +1,18 @@
-import { HeartOutlined } from '@ant-design/icons'
+import { HeartFilled, HeartOutlined } from '@ant-design/icons'
 import { Button, Card, Col, Rate, Row, Typography } from 'antd'
 import Meta from 'antd/es/card/Meta'
 import React from 'react'
-import { Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import StaffPaths from '../../Paths/StaffPaths'
+import { useDispatch } from 'react-redux'
+import { likeRestaurant } from '../../redux/reducer/modules/StaffReducer'
 
 function CardRes({ item }) {
-    return ( 
+    const dispatch = useDispatch()
+    const handleLike = (id) => {
+        dispatch(likeRestaurant(id))
+    }
+    return (
         <Link to={StaffPaths.RES_DETAIL.replace(':restaurantId', item?._id)}>
             <Card
                 className='w-100'
@@ -35,7 +41,18 @@ function CardRes({ item }) {
                                 <Rate allowHalf defaultValue={2.5} />
                             </Col>
                             <Col span={24} className='d-flex justify-content-start'>
-                                <HeartOutlined style={{ fontSize: 24 }} />
+                                {
+                                    item?.favorite ? <HeartFilled onClick={(e) => {
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                        handleLike(item?._id)
+                                    }} style={{ fontSize: 24, color: 'red' }} />
+                                        : <HeartOutlined onClick={(e) => {
+                                            e.stopPropagation()
+                                            e.preventDefault()
+                                            handleLike(item?._id)
+                                        }} style={{ fontSize: 24 }} />
+                                }
                             </Col>
                         </Row>
                     }

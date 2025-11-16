@@ -18,3 +18,19 @@ export const detailRestaurant=async(id)=>{
     const res = instance.get(`/v1/api/restaurant/manager/${id}/detail`)
     return res
 }
+
+export const getListTable=async(restaurantId)=>{
+    const res = instance.get('/v1/api/restaurant/manager/list')
+    return res
+}
+
+export const getRestaurantDetailApi= async(id)=>{
+    const res =await instance.get(`/v1/api/restaurant/manager/${id}/detail`)
+    return res 
+}
+
+export const createTableApi=async(values)=>{
+    const {restaurantId}= values
+    const res =await instance.post(`/v1/api/table/restaurant/${restaurantId}/createNewTable`, values)
+    return res 
+}

@@ -20,7 +20,7 @@ function MenuManager() {
         navigate(`${e?.key}`)
     };
     return (
-        <div style={{ width: 256, position: 'fixed', top: "30%", zIndex: 5 }}>
+        <div style={{ position: 'fixed', top: "30%", zIndex: 5 }}>
             <Button type="primary" onClick={toggleCollapsed} style={{ borderRadius: '0 15px 15px 0' }} >
                 {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </Button>
