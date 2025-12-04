@@ -17,7 +17,7 @@ function App() {
     { path: '/register', element: <RegisterPage /> },
     { path: '/forgot-password', element: <ForgotPassword /> },
     { path: '/account/verification', element: <Verification /> },
-    { path: '/', element: <Home /> },
+    { path: '/', element: <StaffLayout />, children: StaffRoutes}, 
     {
       element: <StaffLayout />,
       children: StaffRoutes,

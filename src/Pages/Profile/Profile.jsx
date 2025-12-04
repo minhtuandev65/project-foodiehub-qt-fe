@@ -36,7 +36,8 @@ import showMessage from '../../Helper/showMessage';
 import { API_BASE_URL } from '../../settings/config'
 import { useTranslation } from "react-i18next";
 import dayjs from 'dayjs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateProfile } from '../../redux/reducer/modules/StaffReducer';
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -50,14 +51,17 @@ const Profile = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState([])
+    const dispatch= useDispatch()
 
 
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            const response = await axios.put(`${API_BASE_URL}/v1/api/user/profile`, {
-                ...values
-            });
+            // const response = await axios.put(`${API_BASE_URL}/v1/api/user/updateMyProfile`, {
+            //     ...values
+            // });
+            dispatch(updateProfile(values))
+            
 
             showMessage('Cập nhật profile thành công!', 'success');
             setEditing(false);
@@ -191,8 +195,8 @@ const Profile = () => {
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Giới tính">
                                     <Space>
-                                        {profileData.gender === 'MALE' ? <ManOutlined style={{ color: '#1890ff' }} /> : <WomanOutlined style={{ color: '#f759ab' }} />}
-                                        {profileData.gender === 'MALE' ? 'Nam' : 'Nữ'}
+                                        {profileData.gender === '1' ? <ManOutlined style={{ color: '#1890ff' }} /> : <WomanOutlined style={{ color: '#f759ab' }} />}
+                                        {profileData.gender === '2' ? 'Nam' : 'Nữ'}
                                     </Space>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Ngày tạo">
@@ -304,13 +308,13 @@ const Profile = () => {
                                     rules={[{ required: true, message: 'Vui lòng chọn giới tính!' }]}
                                 >
                                     <Select placeholder="Chọn giới tính">
-                                        <Option value="MALE">
+                                        <Option value="1">
                                             <Space>
                                                 <ManOutlined style={{ color: '#1890ff' }} />
                                                 Nam
                                             </Space>
                                         </Option>
-                                        <Option value="FEMALE">
+                                        <Option value="2">
                                             <Space>
                                                 <WomanOutlined style={{ color: '#f759ab' }} />
                                                 Nữ

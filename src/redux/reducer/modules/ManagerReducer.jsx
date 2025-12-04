@@ -7,8 +7,16 @@ const initialState = {
     listRes: [],
     loadingDetail: [],
     itemDetail: {},
-    loadingCreate: false ,
-    loadingEdit:false
+    loadingCreate: false,
+    loadingEdit: false,
+    restaurantDetail: {},
+    loadingDetailRestaurant: false,
+    dataComment: [],
+    loadingCreateComment: false,
+    loadingGetComment: false,
+    loadingDeleteComment: false,
+    loadingGetStaff:false,
+    dataStaff:[]
 }
 
 const ManagerReducer = createSlice({
@@ -34,20 +42,52 @@ const ManagerReducer = createSlice({
             state.itemDetail = payload?.data?.data
             state.loadingDetail = false
         });
-         builder.addCase(handleCreateNewRestaurant.pending, (state) => {
+        builder.addCase(handleCreateNewRestaurant.pending, (state) => {
             state.loadingCreate = true
         });
-         builder.addCase(handleCreateNewRestaurant.fulfilled, (state, { payload }) => {
+        builder.addCase(handleCreateNewRestaurant.fulfilled, (state, { payload }) => {
             state.loadingCreate = false
             showMessage(payload?.data?.message, 'success')
         });
-         builder.addCase(handleEditRestaurant.pending, (state) => {
+        builder.addCase(handleEditRestaurant.pending, (state) => {
             state.loadingEdit = true
         });
-         builder.addCase(handleEditRestaurant.fulfilled, (state, { payload }) => {
+        builder.addCase(handleEditRestaurant.fulfilled, (state, { payload }) => {
             state.loadingEdit = false
             showMessage(payload?.data?.message, 'success')
-        });
+        })
+        builder.addCase(getRestaurantDetail.pending, (state) => {
+            state.loadingDetailRestaurant = true;
+        })
+        builder.addCase(getRestaurantDetail.fulfilled, (state, { payload }) => {
+            console.log(payload)
+            state.restaurantDetail = payload?.data?.data;
+            state.loadingGetRestaurants = false;
+        })
+        builder.addCase(getRestaurantDetail.rejected, (state) => {
+            state.loadingDetailRestaurant = false;
+        }),
+        builder.addCase(createComment.pending, (state) => {
+                state.loadingCreateComment = true;
+        })
+        builder.addCase(createComment.fulfilled, (state, { payload }) => {
+            state.dataComment.commentList.push(payload?.data?.data)
+            state.loadingCreateComment = false;
+        })
+        builder.addCase(createComment.rejected, (state) => {
+            state.loadingCreateComment = false;
+        }),
+        builder.addCase(getStaff.pending, (state) => {
+                state.loadingGetStaff = true;
+        })
+        builder.addCase(getStaff.fulfilled, (state, { payload }) => {
+            console.log(payload)
+            state.dataStaff= payload.data.data
+            state.loadingGetStaff = false;
+        })
+        builder.addCase(getStaff.rejected, (state) => {
+            state.loadingGetStaff = false;
+        })
     },
 });
 
@@ -80,7 +120,7 @@ export const handleSeeDetailRes = createAsyncThunk('manager/see-detail-res', asy
 })
 
 
-export const handleEditRestaurant = createAsyncThunk('manager/edit-res', async ({id, values}) => {
+export const handleEditRestaurant = createAsyncThunk('manager/edit-res', async ({ id, values }) => {
     try {
         const res = await ManagerAPI.editRestaurant(id, values)
         return res
@@ -89,6 +129,49 @@ export const handleEditRestaurant = createAsyncThunk('manager/edit-res', async (
     }
 })
 
+export const getRestaurantDetail = createAsyncThunk('manager/getRestaurantDetail', async (id) => {
+    const res = await ManagerAPI.getRestaurantDetailApi(id);
+    return res
+})
+
+export const createTable = createAsyncThunk('manager/createTable', async ({ restaurantId, values }) => {
+    const res = await ManagerAPI.createTableApi({ restaurantId, values });
+    return res
+})
+
+export const createComment = createAsyncThunk('staff/createComment', async (data) => {
+    const res = await ManagerAPI.createCommentApi(data);
+    return res
+})
+
+export const getComments = createAsyncThunk('staff/getComments', async (restaurantId) => {
+    const res = await ManagerAPI.getCommentsApi(restaurantId);
+    return res
+})
+
+export const deleteComment = createAsyncThunk(
+    'staff/deleteComment',
+    async (commentId, { rejectWithValue }) => {
+        try {
+            const res = await ManagerAPI.deleteCommentApi(commentId);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+export const getStaff = createAsyncThunk(
+    'staff/getStaff',
+    async (restaurantId, { rejectWithValue }) => {
+        try {
+            const res = await ManagerAPI.getStaffApi(restaurantId);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
 
 export const { setUser } = ManagerReducer.actions
 

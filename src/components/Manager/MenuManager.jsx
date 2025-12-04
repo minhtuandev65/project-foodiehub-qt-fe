@@ -3,13 +3,12 @@ import { Button, Menu } from 'antd'
 import React, { useState } from 'react'
 import ManagerPaths from '../../Paths/ManagerPaths';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 function MenuManager() {
     const items = [
-        { key: `/${ManagerPaths.GENERAL}`, label: 'Thống kê' },
-        { key: `/${ManagerPaths.LIST_CV}`, label: 'Danh sách nộp cv' },
-        { key: `/${ManagerPaths.LIST_USER}`, label: 'Nhân viên' },
-        { key: `/${ManagerPaths.LIST_RES}`, label: 'Nhà hàng' },
+        { key: `/${ManagerPaths.GENERAL}`, label: t('dashboard') },
+        { key: `/${ManagerPaths.LIST_RES}`, label: t('restaurant') },
     ]
     const [collapsed, setCollapsed] = useState(true);
     const toggleCollapsed = () => {
@@ -20,7 +19,7 @@ function MenuManager() {
         navigate(`${e?.key}`)
     };
     return (
-        <div style={{ width: 256, position: 'fixed', top: "30%", zIndex: 5 }}>
+        <div style={{ position: 'fixed', top: "30%", zIndex: 5 }}>
             <Button type="primary" onClick={toggleCollapsed} style={{ borderRadius: '0 15px 15px 0' }} >
                 {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </Button>

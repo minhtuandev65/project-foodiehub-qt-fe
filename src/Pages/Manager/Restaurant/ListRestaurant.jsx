@@ -6,18 +6,27 @@ import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRe
 import { API_BASE_URL } from '../../../settings/config';
 import { useDispatch, useSelector } from 'react-redux';
 import { handelGetRestaurant, handleSeeDetailRes } from '../../../redux/reducer/modules/ManagerReducer';
+import { Link, useNavigate } from 'react-router-dom';
+import ManagerPaths from '../../../Paths/ManagerPaths';
+import { t } from 'i18next';
 
 function ListRestaurant() {
   const { listRes } = useSelector((state) => state.manager)
   const [open, setOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const columns = [
     {
-      title: 'Tên nhà hàng',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
       sorter: (a, b) => a.name.localeCompare(b.name),
+      render:(text, record)=>{
+        return <Typography.Text style={{cursor:'pointer'}} onClick={()=>{
+          navigate(`/${ManagerPaths.RES_DETAIL.replace(':restaurantId', record?._id)}`)
+        }} >{record?.name}</Typography.Text>
+      }
     },
     {
       title: 'Logo',
@@ -28,18 +37,18 @@ function ListRestaurant() {
       }
     },
     {
-      title: 'Địa chỉ',
+      title: t('address'),
       dataIndex: 'address',
       key: 'position',
       sorter: (a, b) => a.position.localeCompare(b.position),
     },
     {
-      title: 'Ngày tạo',
+      title: t('createAt'),
       dataIndex: 'createdAt',
       key: 'submitDate',
     },
     {
-      title: 'Trạng thái',
+      title: t('status'),
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
@@ -55,7 +64,7 @@ function ListRestaurant() {
       onFilter: (value, record) => record.status === value,
     },
     {
-      title: 'Thao tác',
+      title: t('action'),
       key: 'action',
       render: (text, record) => {
         return <Space size="middle">
@@ -89,8 +98,8 @@ function ListRestaurant() {
         <Card className="table-card">
           <Row>
             <Col span={24} className='d-flex justify-content-between'>
-              <Typography.Title level={4}>Danh sách nhà hàng</Typography.Title>
-              <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>Thêm nhà hàng</Button>
+              <Typography.Title level={4}>{t('listRestaurant')}</Typography.Title>
+              <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>Add new</Button>
             </Col>
             <Col span={24} >
               <Table

@@ -1,20 +1,25 @@
-import { Card, Col, Row, Table } from 'antd'
-import React, { useState } from 'react'
+import { DeleteFilled, DeleteOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Row, Space, Table, Tag, Typography } from 'antd'
+import { t } from 'i18next';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getStaff } from '../../../redux/reducer/modules/ManagerReducer';
+import dayjs from 'dayjs';
 
 function ListUser() {
-    const [filteredData, setFilteredData] = useState([]);
+    const { dataStaff } = useSelector((state) => state.manager)
+    const { restaurantId } = useParams()
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getStaff(restaurantId))
+    }, [])
     const columns = [
         {
-            title: 'Tên ứng viên',
-            dataIndex: 'name',
+            title: t('name'),
+            dataIndex: 'fullName',
             key: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),
-        },
-        {
-            title: 'Vị trí ứng tuyển',
-            dataIndex: 'position',
-            key: 'position',
-            sorter: (a, b) => a.position.localeCompare(b.position),
+            sorter: (a, b) => a.fullName.localeCompare(b.fullName),
         },
         {
             title: 'Email',
@@ -22,61 +27,66 @@ function ListUser() {
             key: 'email',
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
-            key: 'phone',
+            title: t('submitDate'),
+            dataIndex: 'updatedAt',
+            key: 'updatedAt',
+            render: (text, record, index) => {
+                return dayjs(record?.updatedAt || record?.createdAt).format('DD/MM/YYYY')
+            }
         },
         {
-            title: 'Kinh nghiệm',
-            dataIndex: 'experience',
-            key: 'experience',
+            title: t('hourWork'),
+            dataIndex: 'hourWork',
+            key: 'hourWork',
+            render: (text, record, index) => {
+                return `${record?.workStartTime} - ${record?.workEndTime}`
+            }
         },
         {
-            title: 'Ngày nộp',
-            dataIndex: 'submitDate',
-            key: 'submitDate',
-            sorter: (a, b) => new Date(a.submitDate) - new Date(b.submitDate),
+            title: t('dayWord'),
+            dataIndex: 'dayWord',
+            key: 'dayWord',
+            render: (text, record, index) => {
+                return record?.workDays?.map((item) => {
+                    return <Tag key={'green'} color={'green'} variant={'filled'}>
+                        T{item}
+                    </Tag>
+                })
+            }
+        },
+         {
+            title: t('gender'),
+            key: 'gender',
+            render: (text, record, index) => {
+                return <Typography.Text>{record?.gender == 1 ? t('male'):  t('female')}</Typography.Text>
+            }
         },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            key: 'status',
-            render: (status) => {
-                let color = status === 'approved' ? 'green' : status === 'pending' ? 'orange' : 'red';
-                let text = status === 'approved' ? 'Đã duyệt' : status === 'pending' ? 'Chờ duyệt' : 'Từ chối';
-                return <Tag color={color}>{text}</Tag>;
-            },
-            filters: [
-                { text: 'Đã duyệt', value: 'approved' },
-                { text: 'Chờ duyệt', value: 'pending' },
-                { text: 'Từ chối', value: 'rejected' },
-            ],
-            onFilter: (value, record) => record.status === value,
-        },
-        {
-            title: 'Thao tác',
+            title: t('action'),
             key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <Button type="primary" size="small">Xem</Button>
-                    <Button type="default" size="small">Sửa</Button>
+            render: (text, record) => {
+                return <Space size="middle">
+                    <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => { 
+
+                    }}></Button>
+                    <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
                 </Space>
-            ),
+            }
         },
     ];
     return (
         <Row className='mt-0 me-0 mt-5'>
             <Col span={24}>
-                <Card title="Danh sách CV" className="table-card">
+                <Card title={`${t('listStaff')}`} className="table-card">
                     <Table
                         columns={columns}
-                        dataSource={filteredData}
+                        dataSource={dataStaff?.staffList}
                         pagination={{
                             pageSize: 10,
                             showSizeChanger: true,
                             showQuickJumper: true,
                             showTotal: (total, range) =>
-                                `${range[0]}-${range[1]} của ${total} CV`,
+                                `${range[0]}-${range[1]} ${t('of')} ${total}`,
                         }}
                         scroll={{ x: 1000 }}
                     />

@@ -1,5 +1,4 @@
-// LoginPage.jsx
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Form,
   Input,
@@ -17,14 +16,11 @@ import {
   LockOutlined,
   EyeInvisibleOutlined,
   EyeTwoTone,
-  GoogleOutlined,
-  FacebookOutlined,
   CrownOutlined,
   FacebookFilled,
   GoogleCircleFilled
 } from '@ant-design/icons';
 import '../../assets/css/login.css';
-import axios from 'axios';
 import showMessage from '../../Helper/showMessage';
 import { API_BASE_URL } from '../../settings/config'
 import { Link, useNavigate } from 'react-router-dom'

@@ -289,15 +289,7 @@
 }
 
 /* Row spacing */
-.ant-row {
-    /* margin-left: -8px !important; */
-    /* margin-right: -8px !important; */
-}
 
-.ant-col {
-    padding-left: 8px;
-    padding-right: 8px;
-}
 
 /* Responsive */
 @media (max-width: 768px) {

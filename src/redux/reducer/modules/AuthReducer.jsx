@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { login } from '../../api/AuthApi'
-import showMessage from '../../../Helper/showMessage';
 import Cookies from 'js-cookie';
 
 const initialState = {
