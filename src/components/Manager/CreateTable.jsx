@@ -11,8 +11,8 @@ import { useParams } from 'react-router-dom'
 function CreateTable({ itemEdit, open, setOpen }) {
     const [form] = useForm()
     const [logoFile, setLogoFile] = useState([])
-    const {restaurantId}= useParams()
-    const dispatch= useDispatch()
+    const { restaurantId } = useParams()
+    const dispatch = useDispatch()
     const uploadProps = {
         beforeUpload: (file) => {
             const isImage = file.type.startsWith('image/')
@@ -31,9 +31,10 @@ function CreateTable({ itemEdit, open, setOpen }) {
         onRemove: () => true
     }
 
-    const handleSubmit=async()=>{
+    const handleSubmit = async () => {
         await form.validateFields()
-        const values={
+        const formData = new FormData();
+        const values = {
             restaurantId,
             name: form.getFieldValue('name'),
             imageURL: logoFile[0]?.originFileObj,
@@ -41,7 +42,22 @@ function CreateTable({ itemEdit, open, setOpen }) {
             description: form.getFieldValue('description'),
             capacity: form.getFieldValue('capacity'),
         }
-        dispatch(createTable(values))
+
+        Object.keys(values).forEach((key) => {
+            if (key !== "imageURL") {
+                if (Array.isArray(values[key])) {
+                    values[key].forEach((item) => {
+                        formData.append(`${key}[]`, item)
+                    })
+                } else {
+                    formData.append(key, values[key])
+                }
+            }
+        })
+         if (logoFile[0]?.originFileObj) {
+                formData.append("imageURL", logoFile[0].originFileObj);
+            }
+        dispatch(createTable({restaurantId, values: formData}))
         console.log(form.getFieldsValue())
         console.log(logoFile)
     }
@@ -62,7 +78,7 @@ function CreateTable({ itemEdit, open, setOpen }) {
         return false // Prevent default upload behavior
     }
     return (
-        <Modal onOk={()=>{handleSubmit()}} onCancel={() => { setOpen(false) }} open={open} title={"Thêm bàn"}>
+        <Modal onOk={() => { handleSubmit() }} onCancel={() => { setOpen(false) }} open={open} title={"Thêm bàn"}>
             <Form form={form} layout='vertical'>
                 <Form.Item label={t('table_name')} name={'name'}>
                     <Input />
@@ -85,7 +101,7 @@ function CreateTable({ itemEdit, open, setOpen }) {
                 <Form.Item label={t('table_capacity')} name={'capacity'}>
                     <InputNumber defaultValue={1} />
                 </Form.Item>
-                <Form.Item label={t('table_image') }>
+                <Form.Item label={t('table_image')}>
                     <Upload
                         disabled={itemEdit ? true : false}
                         {...uploadProps}

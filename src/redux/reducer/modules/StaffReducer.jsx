@@ -10,7 +10,12 @@ const initialState = {
     loadingDetailRestaurant: false,
     listTableRestaurant: [],
     loadingGetTable: false,
-    loadingLike: false
+    loadingLike: false,
+    dataComment: [],
+    loadingCreateComment: false,
+    loadingGetComment: false,
+    loadingDeleteComment: false,
+    loadingRating: false
 }
 
 const StaffReducer = createSlice({
@@ -39,7 +44,6 @@ const StaffReducer = createSlice({
             state.loadingDetailRestaurant = true;
         })
         builder.addCase(getRestaurantDetail.fulfilled, (state, { payload }) => {
-            console.log(payload)
             state.restaurantDetail = payload?.data?.data;
             state.loadingGetRestaurants = false;
         })
@@ -76,6 +80,53 @@ const StaffReducer = createSlice({
         })
         builder.addCase(likeRestaurant.rejected, (state) => {
             state.loadingLike = false;
+        }),
+            builder.addCase(getComments.pending, (state) => {
+                state.loadingGetComment = true;
+            })
+        builder.addCase(getComments.fulfilled, (state, { payload }) => {
+            state.dataComment = payload?.data?.data;
+            state.loadingGetComment = false;
+        })
+        builder.addCase(getComments.rejected, (state) => {
+            state.loadingGetComment = false;
+        })
+        builder.addCase(createComment.pending, (state) => {
+            state.loadingCreateComment = true;
+        })
+        builder.addCase(createComment.fulfilled, (state, { payload }) => {
+            state.dataComment.commentList.push(payload?.data?.data)
+            state.loadingCreateComment = false;
+        })
+        builder.addCase(createComment.rejected, (state) => {
+            state.loadingCreateComment = false;
+        })
+        builder.addCase(deleteComment.pending, (state) => {
+            state.loadingDeleteComment = true;
+        })
+        builder.addCase(deleteComment.fulfilled, (state, { payload }) => {
+            state.dataComment.commentList = state.dataComment.commentList.filter((item) => item?._id != payload?.data?.data?._id)
+            state.loadingDeleteComment = false;
+            showMessage(payload?.data?.message, 'success')
+        })
+        builder.addCase(deleteComment.rejected, (state, {payload}) => {
+            state.loadingDeleteComment = false;
+            showMessage(payload?.message, 'error')
+
+        }),
+         builder.addCase(ratingRestaurant.pending, (state) => {
+            state.loadingRating = true;
+        })
+        builder.addCase(ratingRestaurant.fulfilled, (state, { payload }) => {
+            console.log(payload)
+            state.loadingRating = false;
+            state.restaurantDetail={...state.restaurantDetail, rating: payload?.data?.data?.rating}
+            showMessage(payload?.data?.message, 'success')
+        })
+        builder.addCase(ratingRestaurant.rejected, (state, {payload}) => {
+            state.loadingRating = false;
+            showMessage(payload?.message, 'error')
+
         })
     },
 });
@@ -109,6 +160,43 @@ export const likeRestaurant = createAsyncThunk('staff/likeRestaurant', async (re
     const res = await StaffApi.likeRestaurantApi(restaurantId);
     return res
 })
+
+export const createComment = createAsyncThunk('staff/createComment', async (data) => {
+    const res = await StaffApi.createCommentApi(data);
+    return res
+})
+
+export const getComments = createAsyncThunk('staff/getComments', async (restaurantId) => {
+    const res = await StaffApi.getCommentsApi(restaurantId);
+    return res
+})
+
+export const deleteComment = createAsyncThunk(
+    'staff/deleteComment',
+    async (commentId, { rejectWithValue }) => {
+        try {
+            const res = await StaffApi.deleteCommentApi(commentId);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+export const ratingRestaurant= createAsyncThunk(
+    'staff/ratingRestaurant',
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await StaffApi.ratingApi(data);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+
+
 
 export const { setUser } = StaffReducer.actions
 

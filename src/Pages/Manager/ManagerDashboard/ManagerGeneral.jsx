@@ -4,6 +4,7 @@ import { UserOutlined, CheckCircleOutlined, ClockCircleOutlined, FileTextOutline
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import '../../../assets/css/manager/general.css';
+import { t } from 'i18next';
 
 // Đăng ký các component của Chart.js
 ChartJS.register(
@@ -101,10 +102,10 @@ const ManagerGeneral = () => {
 
   // Dữ liệu cho biểu đồ cột
   const barChartData = {
-    labels: ['Tổng CV', 'Đã duyệt', 'Chờ duyệt', 'Từ chối'],
+    labels: ['Total restaurants', 'Approved', 'Pending', 'Refuse'],
     datasets: [
       {
-        label: 'Số lượng CV',
+        label: 'Number of restaurants',
         data: [totalCv, approvedCv, pendingCv, rejectedCv],
         backgroundColor: [
           '#1890ff',
@@ -125,7 +126,7 @@ const ManagerGeneral = () => {
 
   // Dữ liệu cho biểu đồ tròn
   const doughnutChartData = {
-    labels: ['Đã duyệt', 'Chờ duyệt', 'Từ chối'],
+    labels: ['Approved', 'Pending', 'Refuse'],
     datasets: [
       {
         data: [approvedCv, pendingCv, rejectedCv],
@@ -152,7 +153,7 @@ const ManagerGeneral = () => {
       },
       title: {
         display: true,
-        text: 'Thống kê CV theo trạng thái'
+        text: 'Restaurant statistics by status'
       }
     }
   };
@@ -165,7 +166,7 @@ const ManagerGeneral = () => {
       },
       title: {
         display: true,
-        text: 'Tỷ lệ CV theo trạng thái'
+        text: 'Restaurant rates by status'
       }
     }
   };
@@ -207,7 +208,7 @@ const ManagerGeneral = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>Dashboard Quản lý CV</h1>
+        <h1>{t('dashboardAdmin')}</h1>
         <div className="dashboard-filters">
           <Space>
             <RangePicker onChange={handleDateRangeChange} />
@@ -216,7 +217,7 @@ const ManagerGeneral = () => {
               style={{ width: 150 }}
               onChange={handleStatusFilterChange}
             >
-              <Option value="all">Tất cả</Option>
+              <Option value="all">All</Option>
               <Option value="approved">Đã duyệt</Option>
               <Option value="pending">Chờ duyệt</Option>
               <Option value="rejected">Từ chối</Option>
@@ -226,7 +227,7 @@ const ManagerGeneral = () => {
       </div>
 
       {/* Thống kê tổng quan */}
-      <Row gutter={[16, 16]} className="stats-row">
+      {/* <Row gutter={[16, 16]} className="stats-row">
         <Col xs={24} sm={12} md={6}>
           <Card className="stat-card total-cv">
             <Statistic
@@ -267,17 +268,17 @@ const ManagerGeneral = () => {
             />
           </Card>
         </Col>
-      </Row>
+      </Row> */}
 
       {/* Biểu đồ */}
       <Row gutter={[16, 16]} className="charts-row">
         <Col xs={24} lg={12}>
-          <Card title="Thống kê theo cột" className="chart-card">
+          <Card title="Column statistics" className="chart-card">
             <Bar data={barChartData} options={chartOptions} />
           </Card>
         </Col>
         <Col xs={24} lg={12}>
-          <Card title="Thống kê theo tỷ lệ" className="chart-card">
+          <Card title="Proportional statistics" className="chart-card">
             <Doughnut data={doughnutChartData} options={doughnutOptions} />
           </Card>
         </Col>

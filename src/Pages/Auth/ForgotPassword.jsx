@@ -97,7 +97,7 @@ const ForgotPassword = () => {
               FoodieHub
             </Title>
             <Text className="logo-subtitle">
-              {emailSent ? 'Email đã được gửi' : 'Khôi phục mật khẩu'}
+              {emailSent ? 'Email đã được gửi' : 'Password recovery'}
             </Text>
           </div>
 
@@ -116,7 +116,7 @@ const ForgotPassword = () => {
               >
                 <div style={{ marginBottom: 24, textAlign: 'center' }}>
                   <Text type="secondary">
-                    Nhập địa chỉ email của bạn và chúng tôi sẽ gửi cho bạn liên kết để khôi phục mật khẩu.
+                  Enter your email address and we will send you a link to recover your password.
                   </Text>
                 </div>
 
@@ -143,7 +143,7 @@ const ForgotPassword = () => {
                     className="submit-button"
                     block
                   >
-                    Gửi email khôi phục
+                    Send recovery email
                   </Button>
                 </Form.Item>
               </Form>
@@ -152,7 +152,7 @@ const ForgotPassword = () => {
               <div className="signup-section">
                 <Link to="/login" className="signup-link">
                   <ArrowLeftOutlined style={{ marginRight: 8 }} />
-                  Quay lại đăng nhập
+                  Back to login
                 </Link>
               </div>
             </>

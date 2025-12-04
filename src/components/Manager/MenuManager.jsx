@@ -3,13 +3,12 @@ import { Button, Menu } from 'antd'
 import React, { useState } from 'react'
 import ManagerPaths from '../../Paths/ManagerPaths';
 import { useNavigate } from 'react-router-dom';
+import { t } from 'i18next';
 
 function MenuManager() {
     const items = [
-        { key: `/${ManagerPaths.GENERAL}`, label: 'Thống kê' },
-        { key: `/${ManagerPaths.LIST_CV}`, label: 'Danh sách nộp cv' },
-        { key: `/${ManagerPaths.LIST_USER}`, label: 'Nhân viên' },
-        { key: `/${ManagerPaths.LIST_RES}`, label: 'Nhà hàng' },
+        { key: `/${ManagerPaths.GENERAL}`, label: t('dashboard') },
+        { key: `/${ManagerPaths.LIST_RES}`, label: t('restaurant') },
     ]
     const [collapsed, setCollapsed] = useState(true);
     const toggleCollapsed = () => {

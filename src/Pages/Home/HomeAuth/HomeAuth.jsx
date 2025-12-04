@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Layout, Pagination, Row, Typography } from 'antd';
+import { Button, Col, Layout, Pagination, Row, Segmented, Typography } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import { Fade, Slide, Zoom } from 'react-awesome-reveal';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getListRestaurant, likeRestaurant } from '../../../redux/reducer/modules/StaffReducer';
+import { getListRestaurant } from '../../../redux/reducer/modules/StaffReducer';
 import CardRes from '../../../components/Staff/CardRes';
 import { t } from 'i18next';
+import { HeartFilled, StarFilled, StarOutlined } from '@ant-design/icons';
 
 function HomeNotAuth() {
   const { restaurants } = useSelector((state) => state.staff)
-  const [filter, setFilter] = useState({ page: 1, limit: 12 })
+  const [filter, setFilter] = useState({ page: 1, limit: 12, status: 0 })
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(getListRestaurant(filter))
-  }, [filter?.limit, filter?.page])
+  }, [filter?.limit, filter?.page, filter?.status])
 
-console.log(restaurants?.restaurantList)
+  console.log(restaurants?.restaurantList)
 
   return (
     <Layout className='w-100 bg-white'>
@@ -24,6 +24,20 @@ console.log(restaurants?.restaurantList)
         <Typography.Title level={2} className='text-center'>
           {t('restaurant_list')}
         </Typography.Title>
+        <Row className='mb-3'>
+          <Col span={24}>
+            <Segmented
+            
+              options={[
+                { value: 0, label: <Typography.Text style={{fontSize:16}}>Tất cả</Typography.Text> },
+                { value: 1, icon: <HeartFilled style={{color:'red'}} />, label: <Typography.Text style={{fontSize:16}}>Yêu thích</Typography.Text> },
+              ]}
+              onChange={value => {
+                setFilter({...filter, status: value})
+              }}
+            />
+          </Col>
+        </Row>
         <Row gutter={[24, 24]}>
           {
             restaurants?.restaurantList?.map((item, index) => {
@@ -33,7 +47,7 @@ console.log(restaurants?.restaurantList)
             })
           }
           <Col span={24} className='d-flex justify-content-end'>
-            <Pagination defaultCurrent={1} total={restaurants?.total} showSizeChanger onShowSizeChange={(page, limit) => {
+            <Pagination defaultCurrent={1} total={restaurants?.total} pageSize={filter?.limit}  showSizeChanger onShowSizeChange={(page, limit) => {
               setFilter({
                 ...filter, limit
               })
