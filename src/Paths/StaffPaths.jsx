@@ -9,7 +9,8 @@ const USER = {
 
 const RESTAURANT={
     RES_DETAIL: '/restaurant/:restaurantId',
-    RES_TABLE:'/restaurant/:restaurantId/table'
+    RES_TABLE:'/restaurant/:restaurantId/table',
+    RES_MAP:'/map'
 }
 
 

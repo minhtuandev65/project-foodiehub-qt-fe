@@ -9,6 +9,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../settings/config';
 import ManagerPaths from '../Paths/ManagerPaths';
 import AdminPaths from '../Paths/AdminPaths';
+import Cookies from "js-cookie";
 import { t } from 'i18next';
 
 function Header() {
@@ -29,7 +30,7 @@ function Header() {
         try {
             const res = await axios.post(`${API_BASE_URL}/v1/api/auth/logout`)
             if (res?.data?.loggedOut) {
-                localStorage.removeItem('token')
+            Cookies.remove("access_token");
                 navigate('/login')
             }
         } catch (error) {

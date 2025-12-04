@@ -4,13 +4,15 @@ import Profile from "../Pages/Profile/Profile";
 import Home from "../Pages/Home/Home";
 import RestaurantDetail from "../Pages/Staff/Restaurant/RestaurantDetail";
 import Table from "../Pages/Staff/Restaurant/Table";
+import Map from "../Pages/Map/Map";
 
 const StaffRoutes=[
     {path: '/', element: <Home/> },
     {path: StaffPaths.PROFILE, element: <Profile/> },
     {path: StaffPaths.HOME, element: <Home/> },
     {path: StaffPaths.RES_DETAIL, element: <RestaurantDetail/> },
-    {path: StaffPaths.RES_TABLE, element: <Table/> }
+    {path: StaffPaths.RES_TABLE, element: <Table/> },
+    {path: StaffPaths.RES_MAP, element: <Map/> }
 ]
 
 export default StaffRoutes

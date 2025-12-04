@@ -5,7 +5,7 @@ const GENERAL = {
 
 const USER = {
     LIST_CV: 'manager/list-cv',
-    LIST_USER: 'manager/list-user',
+    LIST_USER: 'manager/list-user/:restaurantId',
     LIST_RES: 'manager/list-restaurant',
 }
 

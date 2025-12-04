@@ -29,8 +29,28 @@ export const getRestaurantDetailApi= async(id)=>{
     return res 
 }
 
-export const createTableApi=async(values)=>{
-    const {restaurantId}= values
+export const createTableApi=async({restaurantId, values})=>{
     const res =await instance.post(`/v1/api/table/restaurant/${restaurantId}/createNewTable`, values)
     return res 
+}
+
+
+export const getCommentsApi = async(restaurantId)=>{
+    const res = await instance.get(`/v1/api/restaurant/user/comment/${restaurantId}`)
+    return res
+}
+
+export const createCommentApi=async(data)=>{
+    const res= await instance.post('/v1/api/restaurant/user/comment',data)
+    return res
+}
+
+export const deleteCommentApi=async(commentId)=>{
+    const res= await instance.delete(`/v1/api/restaurant/user/comment/${commentId}`)
+    return res
+}
+
+export const getStaffApi= async(restaurantId)=>{
+    const res = await instance.get(`/v1/api/restaurant/manager/${restaurantId}/staff`)
+    return res
 }
