@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import * as StaffApi from "../../api/StaffApi";
 import showMessage from "../../../Helper/showMessage";
+import { t } from "i18next";
 
 const initialState = {
 	user: {},
@@ -20,8 +21,11 @@ const initialState = {
 	loadingGetBookTable: false,
 	listMenu: [],
 	loadingGetMenu: false,
-	listCartItems: [],
+	listCartItems: {
+		cartItemsList: []
+	},
 	loadingGetCartItems: false,
+	loadingOrderMenu: false
 };
 
 const StaffReducer = createSlice({
@@ -31,6 +35,9 @@ const StaffReducer = createSlice({
 		setUser: (state, { payload }) => {
 			state.user = payload;
 		},
+		setListCartItems:(state, {payload})=>{
+			state.listCartItems.cartItemsList= payload
+		}
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getProfile.fulfilled, (state, { payload }) => {
@@ -134,7 +141,6 @@ const StaffReducer = createSlice({
 				state.loadingRating = true;
 			});
 		builder.addCase(ratingRestaurant.fulfilled, (state, { payload }) => {
-			console.log(payload);
 			state.loadingRating = false;
 			state.restaurantDetail = {
 				...state.restaurantDetail,
@@ -145,11 +151,33 @@ const StaffReducer = createSlice({
 		builder.addCase(ratingRestaurant.rejected, (state, { payload }) => {
 			state.loadingRating = false;
 			showMessage(payload?.message, "error");
-		});
+		})
 		builder.addCase(getCartItems.fulfilled, (state, { payload }) => {
-			state.listCartItems = payload?.data?.data;
+			state.listCartItems = payload?.data?.data || [];
 			state.loadingGetCartItems = false;
+		})
+		builder.addCase(orderMenu.pending, (state) => {
+			state.loadingOrderMenu = true;
 		});
+		builder.addCase(orderMenu.fulfilled, (state, { payload }) => {
+			state.loadingOrderMenu = false;
+			const indexFind = current(state.listCartItems.cartItemsList).findIndex((item => item?._id == payload?.data?.data?._id))
+			if (indexFind !== -1) {
+				// update item
+				state.listCartItems.cartItemsList[indexFind] = payload?.data?.data;
+			} else {
+				// add new item
+				state.listCartItems.cartItemsList.push(payload?.data?.data);
+			}
+
+			state.loadingOrderMenu = false;
+			showMessage(t('orderSuccess'), 'success');
+		});
+
+		builder.addCase(orderMenu.rejected, (state, { payload }) => {
+			state.loadingOrderMenu = false;
+			showMessage(payload?.message, "error");
+		})
 	},
 });
 
@@ -302,6 +330,6 @@ export const removeCartItem = createAsyncThunk(
 		return res;
 	}
 );
-export const { setUser } = StaffReducer.actions;
+export const { setUser, setListCartItems } = StaffReducer.actions;
 
 export default StaffReducer.reducer;

@@ -1,4 +1,3 @@
-import { data } from "autoprefixer";
 import instance from "../../config";
 import Cookies from "js-cookie";
 

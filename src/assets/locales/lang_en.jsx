@@ -91,7 +91,8 @@ const lang_en = {
   timeOpen:'Opening time',
   dashboardManager:'Dashboard of Manager',
   dashboardAdmin:'Tổng quan của Admin',
-  listRestaurant:'List of restaurants'
+  listRestaurant:'List of restaurants',
+  orderSuccess:"Added item successfully"
 };
 
 

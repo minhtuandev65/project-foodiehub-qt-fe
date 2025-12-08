@@ -1,9 +1,4 @@
-// CardCart.jsx
-// Hiển thị 1 mục trong giỏ hàng (presentational).
-// Props:
-// - item: { cartItemId, menuId, name, imageURL, quantity, unitPrice }
-// - onUpdateQty(newQty)  // parent xử lý API + update local theo menuId
-// - onRemove(menuId)     // parent xử lý API + update local theo menuId
+
 
 import React from "react";
 import { Typography, InputNumber, Button, Space, Tooltip } from "antd";
@@ -15,30 +10,30 @@ export default function CardCart({ item, onUpdateQty, onRemove }) {
 	const menuId = item.menuId ?? item.cartItemId ?? item._id ?? item.name;
 	const qty = Number(item.quantity ?? 1);
 	const unitPrice = Number(item.unitPrice ?? item.price ?? 0);
-	const total = unitPrice * qty;
+	const total = Number(item?.totalPrice|| 0);
 	const maxAvailable =
 		item.available != null ? Number(item.available) : undefined;
 
 	const decrease = () => {
 		const next = qty - 1;
-		if (next >= 1) onUpdateQty?.(next);
+		if (next >= 1) onUpdateQty?.(next, -1);
 		else onRemove?.(menuId);
 	};
 
 	const increase = () => {
 		const next = qty + 1;
 		if (maxAvailable != null && next > maxAvailable) return;
-		onUpdateQty?.(next);
+		onUpdateQty?.(next, 1);
 	};
 
-	const onChangeInput = (val) => {
-		const v = Number(val) || 0;
-		if (v <= 0) onRemove?.(menuId);
-		else {
-			if (maxAvailable != null && v > maxAvailable) onUpdateQty?.(maxAvailable);
-			else onUpdateQty?.(v);
-		}
-	};
+	// const onChangeInput = (val) => {
+	// 	const v = Number(val) || 0;
+	// 	if (v <= 0) onRemove?.(menuId);
+	// 	else {
+	// 		if (maxAvailable != null && v > maxAvailable) onUpdateQty?.(maxAvailable);
+	// 		else onUpdateQty?.(v);
+	// 	}
+	// };
 
 	return (
 		<div
@@ -88,7 +83,8 @@ export default function CardCart({ item, onUpdateQty, onRemove }) {
 						<InputNumber
 							min={1}
 							value={qty}
-							onChange={onChangeInput}
+							// onChange={onChangeInput}
+							readOnly
 							size="small"
 							style={{ width: 80 }}
 							max={maxAvailable}

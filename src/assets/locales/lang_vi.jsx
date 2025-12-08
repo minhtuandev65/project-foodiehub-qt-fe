@@ -93,7 +93,8 @@
   timeOpen:'Thời gian mở cửa',
   dashboardManager:'Tổng quan của quản lý',
   dashboardAdmin:'Tổng quan của quản trị',
-  listRestaurant:'Danh sách nhà hàng'
+  listRestaurant:'Danh sách nhà hàng',
+  orderSuccess:"Thêm món thành công"
 };
 
 

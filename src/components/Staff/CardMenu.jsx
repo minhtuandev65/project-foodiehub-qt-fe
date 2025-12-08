@@ -12,27 +12,29 @@ import {
 	InputNumber,
 } from "antd";
 import Meta from "antd/es/card/Meta";
+import { useDispatch } from "react-redux";
+import { orderMenu } from "../../redux/reducer/modules/StaffReducer";
+import { useParams } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
-export default function CardMenu({ item, cartQty, onAdd }) {
+export default function CardMenu({ item, cartQty }) {
 	const [qtyLocal, setQtyLocal] = useState(1);
+	const dispatch= useDispatch()
+	const {restaurantId}= useParams()	
 
 	useEffect(() => {
-		const stock = Number(item?.quantity ?? 0);
-		setQtyLocal(stock > 0 ? 1 : 0);
+	
 	}, [item?.quantity]);
 
 	useEffect(() => {
-		if (cartQty != null) setQtyLocal(Number(cartQty) > 0 ? Number(cartQty) : 1);
+		// if (cartQty != null) setQtyLocal(Number(cartQty) > 0 ? Number(cartQty) : 1);
 	}, [cartQty]);
 
 	// --- SỬA: truyền rõ ràng menuId, item, qty về parent ---
-	const handleAdd = () => {
-		const qty = Number(qtyLocal) || 1;
-		const menuId = item?._id; // <-- chắc chắn lấy menu _id ở đây
-		if (typeof onAdd === "function") onAdd(menuId, item, qty);
-		else console.warn("CardMenu: missing onAdd callback");
+	const handleAdd = async(item) => {
+		await dispatch(orderMenu({...item, restaurantId, menuId:item?._id, quantity: qtyLocal}))
+		setQtyLocal(1)
 	};
 
 	const priceText =
@@ -42,14 +44,7 @@ export default function CardMenu({ item, cartQty, onAdd }) {
 	const isAvailable = Boolean(
 		item?.isAvailable ?? Number(item?.quantity ?? 0) > 0
 	);
-	const categoryLabel = (() => {
-		const c = String(item?.categories ?? "").toLowerCase();
-		if (!c) return null;
-		if (["dish", "món", "mon"].includes(c)) return "Món ăn";
-		if (["drink", "thức uống", "beverage"].includes(c)) return "Đồ uống";
-		return c.charAt(0).toUpperCase() + c.slice(1);
-	})();
-
+	
 	return (
 		<Card
 			hoverable
@@ -112,7 +107,9 @@ export default function CardMenu({ item, cartQty, onAdd }) {
 							/>
 							<Tooltip title={isAvailable ? "Thêm vào giỏ" : "Món đã hết"}>
 								<Button
-									onClick={handleAdd}
+									onClick={()=>{
+										handleAdd(item)
+									}}
 									disabled={!isAvailable}
 									style={{
 										marginLeft: 8,

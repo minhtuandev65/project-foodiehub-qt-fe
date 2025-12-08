@@ -1,8 +1,3 @@
-// Menu.jsx
-// Parent quản lý localCart theo menuId.
-// localCart item shape:
-// { cartItemId, menuId, name, imageURL, quantity, unitPrice }
-
 import React, { useEffect, useState, useCallback } from "react";
 import CardMenu from "../../../components/Staff/CardMenu";
 import CardCart from "../../../components/Staff/CardCart";
@@ -15,7 +10,6 @@ import {
 	Badge,
 	Button,
 	Drawer,
-	notification,
 } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
@@ -25,6 +19,7 @@ import {
 	increaseQuantity,
 	decreaseQuantity,
 	removeCartItem,
+	setListCartItems,
 } from "../../../redux/reducer/modules/StaffReducer";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -38,31 +33,20 @@ export default function Menu() {
 
 	const [localCart, setLocalCart] = useState([]); // store items keyed by menuId
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	const [inFlight, setInFlight] = useState(new Set());
 
 	// Normalize server cart item -> local shape, sử dụng menuId nếu server trả
 	const normalizeServerCartItem = (srv) => {
 		const qty = Number(srv.quantity ?? 1);
-		const total = Number(srv.price ?? 0);
-		const unitPrice = qty > 0 ? total / qty : total;
 		return {
+			...srv,
 			cartItemId: srv._id,
 			menuId: srv.menuId ?? null, // server hiện đã trả menuId
 			name: srv.name,
 			imageURL: srv.imageURL,
 			quantity: qty,
-			unitPrice,
 		};
 	};
 
-	const normalizeMenuItem = (m, qty = 1) => ({
-		cartItemId: null,
-		menuId: m._id,
-		name: m.name,
-		imageURL: m.imageURL,
-		quantity: qty,
-		unitPrice: Number(m.price ?? 0),
-	});
 
 	// Load menu + cart khi mount
 	useEffect(() => {
@@ -89,14 +73,6 @@ export default function Menu() {
 	// helpers
 	const findByMenuId = (menuId) =>
 		localCart.find((c) => String(c.menuId) === String(menuId));
-	const updateLocalByMenuId = (menuId, updater) =>
-		setLocalCart((prev) =>
-			prev.map((p) => (String(p.menuId) === String(menuId) ? updater(p) : p))
-		);
-	const removeLocalByMenuId = (menuId) =>
-		setLocalCart((prev) =>
-			prev.filter((p) => String(p.menuId) !== String(menuId))
-		);
 
 	const totalCount = localCart.reduce(
 		(s, it) => s + (Number(it.quantity) || 0),
@@ -107,160 +83,35 @@ export default function Menu() {
 		0
 	);
 
-	// phần trong Menu.jsx (replace addToCart cũ)
-	const addToCart = useCallback(
-		async (menuId, menuItem, addQty = 1) => {
-			// menuId: chính là item._id từ CardMenu
-			const snapshot = JSON.parse(JSON.stringify(localCart));
 
-			// 1) local optimistic: tìm theo menuId => tăng quantity; nếu chưa có tạo synthetic with menuId
-			const existing = findByMenuId(menuId);
-			if (existing) {
-				updateLocalByMenuId(menuId, (p) => ({
-					...p,
-					quantity: (Number(p.quantity) || 0) + addQty,
-				}));
-			} else {
-				// synthetic entry: cartItemId null (server sẽ trả sau khi gọi API)
-				const synthetic = normalizeMenuItem(menuItem, addQty); // ensure synthetic.menuId = menuItem._id
-				setLocalCart((prev) => [...prev, synthetic]);
-			}
-
-			// 2) gọi API: orderMenu({ restaurantId, menuId, quantity })
-			try {
-				setInFlight((s) => new Set(s).add(menuId));
-				const res = await dispatch(
-					orderMenu({ restaurantId, menuId, quantity: addQty })
-				);
-				if (res?.error) throw res.error;
-
-				// 3) sync authoritative cart từ server (an toàn nhất): getCartItems -> normalize -> setLocalCart
-				const fresh = await dispatch(getCartItems(restaurantId));
-				const freshPayload = fresh?.payload ?? fresh;
-				if (freshPayload?.cartItemsList) {
-					setLocalCart(freshPayload.cartItemsList.map(normalizeServerCartItem));
+	const updateQty = (item, choose) => {
+		const dataUpdate = listCartItems?.cartItemsList?.map((itemA) => {
+			if (item?.cartItemId == itemA?._id) {
+				return {
+					...itemA,
+					quantity: itemA.quantity + choose
 				}
-			} catch (err) {
-				// rollback nếu lỗi
-				setLocalCart(snapshot);
-				console.error("Thêm món thất bại:", err);
-				notification.error({
-					message: "Thêm món thất bại",
-					description: err?.message || "Vui lòng thử lại",
-				});
-			} finally {
-				setInFlight((s) => {
-					const copy = new Set(s);
-					copy.delete(menuId);
-					return copy;
-				});
 			}
-		},
-		[localCart, dispatch, restaurantId]
-	);
+			return itemA
+		})
+		dispatch(setListCartItems(dataUpdate))
+		if(choose>0){
+			dispatch(increaseQuantity(item?.cartItemId))
+		}
+		else{
+			dispatch(decreaseQuantity(item?.cartItemId))
+		}
+	}
 
-	// ---------- updateQty theo menuId ----------
-	const updateQty = useCallback(
-		async (menuId, newQty) => {
-			const snapshot = JSON.parse(JSON.stringify(localCart));
-			// optimistic local
-			updateLocalByMenuId(menuId, (p) => ({ ...p, quantity: Number(newQty) }));
+		const handleRemove= async(item)=>{
+		const dataUpdate = listCartItems?.cartItemsList?.filter((itemA)=> itemA?._id != item?.cartItemId)
+		await dispatch(setListCartItems(dataUpdate))
+		dispatch(removeCartItem(item?.cartItemId))
+	}
 
-			try {
-				setInFlight((s) => new Set(s).add(menuId));
-				// tìm server cart id nếu có
-				const local = findByMenuId(menuId);
-				if (!local) throw new Error("Item không tồn tại trong cart (FE)");
 
-				const serverCartId = local.cartItemId;
-				if (!serverCartId) {
-					// chưa có trên server -> gọi orderMenu để tạo với quantity = newQty
-					const res = await dispatch(
-						orderMenu({ restaurantId, menuId, quantity: newQty })
-					);
-					if (res?.error) throw res.error;
-				} else {
-					// đã có serverCartId -> tính delta và gọi increase/decrease
-					const prev = snapshot.find(
-						(p) => String(p.menuId) === String(menuId)
-					);
-					const prevQty = prev ? Number(prev.quantity || 0) : 0;
-					const delta = Number(newQty) - prevQty;
 
-					if (delta > 0) {
-						for (let i = 0; i < delta; i++) {
-							const r = await dispatch(increaseQuantity(serverCartId));
-							if (r?.error) throw r.error;
-						}
-					} else if (delta < 0) {
-						for (let i = 0; i < Math.abs(delta); i++) {
-							const r = await dispatch(decreaseQuantity(serverCartId));
-							if (r?.error) throw r.error;
-						}
-					}
-				}
 
-				// sync authoritative
-				const fresh = await dispatch(getCartItems(restaurantId));
-				const freshPayload = fresh?.payload ?? fresh;
-				if (freshPayload?.cartItemsList)
-					setLocalCart(freshPayload.cartItemsList.map(normalizeServerCartItem));
-			} catch (err) {
-				setLocalCart(snapshot);
-				console.error("Cập nhật số lượng thất bại", err);
-				notification.error({
-					message: "Cập nhật thất bại",
-					description: err?.message || "Vui lòng thử lại",
-				});
-			} finally {
-				setInFlight((s) => {
-					const c = new Set(s);
-					c.delete(menuId);
-					return c;
-				});
-			}
-		},
-		[localCart, dispatch, restaurantId]
-	);
-
-	// ---------- remove theo menuId ----------
-	const handleRemove = useCallback(
-		async (menuId) => {
-			const snapshot = JSON.parse(JSON.stringify(localCart));
-			// local optimistic remove
-			removeLocalByMenuId(menuId);
-
-			try {
-				setInFlight((s) => new Set(s).add(menuId));
-				// nếu có server cart id -> gọi removeCartItem(serverCartId)
-				const local = snapshot.find((p) => String(p.menuId) === String(menuId));
-				const serverCartId = local?.cartItemId;
-				if (serverCartId) {
-					const res = await dispatch(removeCartItem(serverCartId));
-					if (res?.error) throw res.error;
-				}
-				// sync authoritative
-				const fresh = await dispatch(getCartItems(restaurantId));
-				const freshPayload = fresh?.payload ?? fresh;
-				if (freshPayload?.cartItemsList)
-					setLocalCart(freshPayload.cartItemsList.map(normalizeServerCartItem));
-			} catch (err) {
-				setLocalCart(snapshot);
-				console.error("Xoá món thất bại", err);
-				notification.error({
-					message: "Xoá thất bại",
-					description: err?.message || "Vui lòng thử lại",
-				});
-			} finally {
-				setInFlight((s) => {
-					const c = new Set(s);
-					c.delete(menuId);
-					return c;
-				});
-			}
-		},
-		[localCart, dispatch, restaurantId]
-	);
 
 	return (
 		<Layout className="w-100 bg-white">
@@ -296,10 +147,6 @@ export default function Menu() {
 										<CardMenu
 											item={m}
 											cartQty={qtyInCart}
-											// lưu ý: onAdd nhận (menuId, menuItem, qty)
-											onAdd={(menuId, menuItem, qty) =>
-												addToCart(menuId, menuItem, qty)
-											}
 										/>
 									</Col>
 								);
@@ -325,8 +172,8 @@ export default function Menu() {
 										<CardCart
 											key={it.menuId ?? it.cartItemId ?? it.name}
 											item={it}
-											onRemove={(menuId) => handleRemove(menuId)}
-											onUpdateQty={(q) => updateQty(it.menuId, q)}
+											onRemove={() => handleRemove(it)}
+											onUpdateQty={(q, choose) => updateQty(it, choose)}
 										/>
 									))}
 
