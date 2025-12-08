@@ -11,7 +11,8 @@ const USER = {
 
 const RESTAURANT={
     RES_DETAIL: 'manager/restaurant/:restaurantId',
-    RES_TABLE:'manager/restaurant/:restaurantId/table'
+    RES_TABLE:'manager/restaurant/:restaurantId/table',
+    RES_MENU:'manager/restaurant/:restaurantId/menu',
 }
 
 
