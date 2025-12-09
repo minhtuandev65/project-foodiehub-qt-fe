@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Col, Layout, Row, Typography, Badge, Button, Drawer } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
-	getCartItems,
+	getCartItemsStaff,
 	getListMenu,
 	increaseQuantity,
 	decreaseQuantity,
@@ -19,11 +19,12 @@ const { Title } = Typography;
 
 export default function MenuStaff() {
 	const { restaurantId } = useParams();
+	const { bookTableId } = useParams();
 	const dispatch = useDispatch();
-	const { listMenu, listCartItems } = useSelector((s) => s.staff);
+	const { listMenu, listCartItemsStaff } = useSelector((s) => s.staff);
 	const [localCart, setLocalCart] = useState([]); // store items keyed by menuId
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	console.log(listCartItems);
+	console.log("listCartItems", listCartItemsStaff);
 	// Normalize server cart item -> local shape, sử dụng menuId nếu server trả
 	const normalizeServerCartItem = (srv) => {
 		const qty = Number(srv.quantity ?? 1);
@@ -43,7 +44,7 @@ export default function MenuStaff() {
 		dispatch(getListMenu(restaurantId));
 		(async () => {
 			try {
-				const res = await dispatch(getCartItems(restaurantId));
+				const res = await dispatch(getCartItemsStaff(bookTableId));
 				const payload = res?.payload?.data ?? res?.data;
 				const items = payload?.cartItemsList ?? [];
 				setLocalCart(items.map(normalizeServerCartItem));
@@ -51,13 +52,13 @@ export default function MenuStaff() {
 				console.error("Lấy cart thất bại", err);
 			}
 		})();
-	}, [restaurantId, dispatch]);
+	}, [restaurantId, dispatch, bookTableId]);
 
 	// Nếu redux cart thay đổi thì sync lại local
 	useEffect(() => {
-		if (!listCartItems?.cartItemsList) return;
-		setLocalCart(listCartItems.cartItemsList.map(normalizeServerCartItem));
-	}, [listCartItems]);
+		if (!listCartItemsStaff?.cartItemsList) return;
+		setLocalCart(listCartItemsStaff.cartItemsList.map(normalizeServerCartItem));
+	}, [listCartItemsStaff]);
 
 	// helpers
 	const findByMenuId = (menuId) =>
@@ -69,7 +70,7 @@ export default function MenuStaff() {
 	);
 
 	const updateQty = (item, choose) => {
-		const dataUpdate = listCartItems?.cartItemsList?.map((itemA) => {
+		const dataUpdate = listCartItemsStaff?.cartItemsList?.map((itemA) => {
 			if (item?.cartItemId == itemA?._id) {
 				return {
 					...itemA,
@@ -87,13 +88,13 @@ export default function MenuStaff() {
 	};
 
 	const handleRemove = async (item) => {
-		const dataUpdate = listCartItems?.cartItemsList?.filter(
+		const dataUpdate = listCartItemsStaff?.cartItemsList?.filter(
 			(itemA) => itemA?._id != item?.cartItemId
 		);
 		await dispatch(setListCartItems(dataUpdate));
 		dispatch(removeCartItem(item?.cartItemId));
 	};
-	const totalPrice = listCartItems?.totalPrice || 0;
+	const totalPrice = listCartItemsStaff?.totalPrice || 0;
 	return (
 		<Layout className="w-100 bg-white">
 			{!drawerOpen && (
@@ -110,7 +111,7 @@ export default function MenuStaff() {
 				</div>
 			)}
 
-			<Content style={{ padding: '80px 30px' }}>
+			<Content style={{ padding: "80px 30px" }}>
 				<Row gutter={[24, 24]}>
 					<Col span={24}>
 						<Title level={2} style={{ textAlign: "center" }}>
