@@ -87,12 +87,18 @@ const lang_en = {
   gender: 'Gender',
   male: 'Male',
   female: 'Female',
-  of:'of',
-  timeOpen:'Opening time',
-  dashboardManager:'Dashboard of Manager',
-  dashboardAdmin:'Tổng quan của Admin',
-  listRestaurant:'List of restaurants',
-  orderSuccess:"Added item successfully"
+  of: 'of',
+  timeOpen: 'Opening time',
+  dashboardManager: 'Dashboard of Manager',
+  dashboardAdmin: 'Tổng quan của Admin',
+  listRestaurant: 'List of restaurants',
+  orderSuccess: "Added item successfully",
+  listTable: 'List of tables',
+  addNew: 'Add new',
+  normal: 'Normal',
+  empty: 'Available',
+  booked: 'Booked',
+  order:'Add dish'
 };
 
 

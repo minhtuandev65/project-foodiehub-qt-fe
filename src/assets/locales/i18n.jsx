@@ -12,8 +12,8 @@ i18n.use(initReactI18next).init({
       translation: lang_vi,
     },
   },
-  lng: "en", // Ngôn ngữ mặc định
-  fallbackLng: "en",
+  lng: "vi", // Ngôn ngữ mặc định
+  fallbackLng: "vi",
 
   interpolation: {
     escapeValue: false,

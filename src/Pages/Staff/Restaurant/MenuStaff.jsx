@@ -7,7 +7,6 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import {
 	getCartItems,
 	getListMenu,
-	orderMenu,
 	increaseQuantity,
 	decreaseQuantity,
 	removeCartItem,
@@ -18,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 const { Content } = Layout;
 const { Title } = Typography;
 
-export default function Menu() {
+export default function MenuStaff() {
 	const { restaurantId } = useParams();
 	const dispatch = useDispatch();
 	const { listMenu, listCartItems } = useSelector((s) => s.staff);

@@ -26,6 +26,13 @@ const initialState = {
 	},
 	loadingGetCartItems: false,
 	loadingOrderMenu: false,
+	listTableMyRes: {
+		data: [],
+		limit: 0,
+		page: 1,
+		total: 0
+	},
+	loadingMyRestaurant: false
 };
 
 const StaffReducer = createSlice({
@@ -178,14 +185,24 @@ const StaffReducer = createSlice({
 
 		builder.addCase(orderMenu.rejected, (state, { payload }) => {
 			state.loadingOrderMenu = false;
-			showMessage(payload?.message, "error");
+		});
+		builder.addCase(getMyRestaurant.pending, (state) => {
+			state.loadingMyRestaurant = true;
+		});
+		builder.addCase(getMyRestaurant.fulfilled, (state, { payload }) => {
+			state.listTableMyRes = payload?.data?.data
+			state.loadingMyRestaurant = false;
+		});
+
+		builder.addCase(getMyRestaurant.rejected, (state, { payload }) => {
+			state.loadingMyRestaurant = false;
 		});
 	},
 });
 
 export const getProfile = createAsyncThunk(
 	"staff/getProfile",
-	async (dispatch) => {
+	async () => {
 		const res = await StaffApi.getProfileApi();
 		return res?.data?.data;
 	}
@@ -332,6 +349,16 @@ export const removeCartItem = createAsyncThunk(
 		return res;
 	}
 );
+
+export const getMyRestaurant = createAsyncThunk(
+	"staff/removeCartItem",
+	async (restaurantId) => {
+		const res = await StaffApi.getMyRestaurantApi(restaurantId);
+		return res;
+	}
+);
+
+
 export const { setUser, setListCartItems } = StaffReducer.actions;
 
 export default StaffReducer.reducer;

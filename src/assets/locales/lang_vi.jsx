@@ -75,7 +75,7 @@
   name:'Tên',
   phoneNumber:'Số điện thoại',
   submitDate:'Ngày nộp',
-  staus:'Trạng thái',
+  status:'Trạng thái',
   action:'Tác vụ',
   dashboard:'Thống kê',
   staff:"Nhân viên",
@@ -94,7 +94,13 @@
   dashboardManager:'Tổng quan của quản lý',
   dashboardAdmin:'Tổng quan của quản trị',
   listRestaurant:'Danh sách nhà hàng',
-  orderSuccess:"Thêm món thành công"
+  orderSuccess:"Thêm món thành công",
+  listTable:'Danh sách bàn',
+  addNew:'Thêm mới',
+  normal:'Thường',
+  empty:'Còn trống',
+  booked:'Đã đặt',
+  order:'Thêm món'
 };
 
 
