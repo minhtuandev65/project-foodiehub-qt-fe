@@ -31,7 +31,6 @@ import {
     AccountBookOutlined
 } from '@ant-design/icons';
 import '../../assets/css/profile.css';
-import axios from 'axios';
 import showMessage from '../../Helper/showMessage';
 import { API_BASE_URL } from '../../settings/config'
 import { useTranslation } from "react-i18next";
@@ -57,9 +56,6 @@ const Profile = () => {
     const onFinish = async (values) => {
         setLoading(true);
         try {
-            // const response = await axios.put(`${API_BASE_URL}/v1/api/user/updateMyProfile`, {
-            //     ...values
-            // });
             dispatch(updateProfile(values))
             
 

@@ -16,7 +16,6 @@ function HomeNotAuth() {
     dispatch(getListRestaurant(filter))
   }, [filter?.limit, filter?.page, filter?.status])
 
-  console.log(restaurants?.restaurantList)
 
   return (
     <Layout className='w-100 bg-white'>

@@ -100,7 +100,11 @@
   normal:'Thường',
   empty:'Còn trống',
   booked:'Đã đặt',
-  order:'Thêm món'
+  order:'Thêm món',
+  admin:'Quản trị',
+  historyBookTable:'Lịch sử đặt bàn',
+  restaurantName:'Tên nhà hàng',
+  statusOrder:'Trạng thái món',
 };
 
 

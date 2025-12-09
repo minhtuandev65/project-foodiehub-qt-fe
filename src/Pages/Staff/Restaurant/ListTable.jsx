@@ -1,21 +1,13 @@
 import Icon, {
 	CloseOutlined,
-	DeleteFilled,
-	EditFilled,
 	FormOutlined,
-	PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Col, Row, Space, Table, Typography, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import ModalAddRes from "../../../components/Manager/ListRestaurant/ModalAddRes";
 import ModalEditRes from "../../../components/Manager/ListRestaurant/ModalEditRes";
-import { API_BASE_URL } from "../../../settings/config";
 import { useDispatch, useSelector } from "react-redux";
-import {
-	handelGetRestaurant,
-	handleSeeDetailRes,
-} from "../../../redux/reducer/modules/ManagerReducer";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import ManagerPaths from "../../../Paths/ManagerPaths";
 import { t } from "i18next";
 import {
@@ -27,7 +19,7 @@ import {
 import addFood from "../../../assets/svg/addFood";
 import StaffPaths from "../../../Paths/StaffPaths";
 import dayjs from "dayjs";
-import { CheckCheckIcon, CheckIcon, TicketCheckIcon } from "lucide-react";
+import {CheckIcon } from "lucide-react";
 
 function ListRestaurant() {
 	const { listTableMyRes } = useSelector((state) => state.staff);
@@ -63,7 +55,7 @@ function ListRestaurant() {
 			dispatch(staffCheckDoneOrder(cartId));
 			setOpen(false);
 		} catch (error) {
-			console.log("Validate thất bại:", err);
+			console.log("Validate thất bại:", error);
 		}
 	};
 	const columns = [
@@ -274,10 +266,7 @@ function ListRestaurant() {
 		setOpenEdit(false);
 	};
 
-	const handleDetail = async (id) => {
-		dispatch(handleSeeDetailRes(id));
-		setOpenEdit(true);
-	};
+
 
 	return (
 		<Row className="mt-0 me-0 mt-5" style={{ padding: "72px 20px 0 20px" }}>

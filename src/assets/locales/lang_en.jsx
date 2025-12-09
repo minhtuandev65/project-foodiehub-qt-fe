@@ -98,7 +98,11 @@ const lang_en = {
   normal: 'Normal',
   empty: 'Available',
   booked: 'Booked',
-  order:'Add dish'
+  order:'Add dish',
+  historyBookTable:'Booking History',
+  restaurantName:'Restaurant name',
+  statusOrder:'Order status'
+
 };
 
 
