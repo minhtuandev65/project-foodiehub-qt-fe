@@ -136,8 +136,30 @@ export const removeCartItemApi = async (cartItemsId) => {
 	return res;
 };
 
+export const getMyRestaurantApi = async () => {
+	const res = await instance.get(`/v1/api/table/staff/list`);
+	return res;
+};
 
-export const getMyRestaurantApi= async()=>{
-	const res = await instance.get(`/v1/api/table/staff/list`)
-	return res
-}
+export const staffBookTableApi = async (restaurantId, tableId) => {
+	const res = await instance.post(
+		`/v1/api/booking/staff/${restaurantId}?tableId=${tableId}`
+	);
+	return res;
+};
+export const staffCancelBookTableApi = async (restaurantId, tableId) => {
+	const res = await instance.patch(
+		`/v1/api/booking/staff/${restaurantId}?tableId=${tableId}`
+	);
+	return res;
+};
+
+export const getCartItemsStaffApi = async (bookTableId) => {
+	const res = await instance.get(`/v1/api/cart-items/staff/${bookTableId}`);
+	return res;
+};
+
+export const staffCheckDoneOrderApi = async (cartId) => {
+	const res = await instance.patch(`/v1/api/cart-items/staff/${cartId}`);
+	return res;
+};
