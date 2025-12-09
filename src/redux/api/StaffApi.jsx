@@ -135,3 +135,9 @@ export const removeCartItemApi = async (cartItemsId) => {
 	const res = await instance.delete(`/v1/api/cart-items/${cartItemsId}`);
 	return res;
 };
+
+
+export const getMyRestaurantApi= async()=>{
+	const res = await instance.get(`/v1/api/table/staff/list`)
+	return res
+}

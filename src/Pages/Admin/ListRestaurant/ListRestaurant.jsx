@@ -5,6 +5,7 @@ import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes'
 import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRes';
 import { useDispatch, useSelector } from 'react-redux';
 import { handelGetRestaurant, handleAcceptRestaurant } from '../../../redux/reducer/modules/AdminReducer';
+import { t } from 'i18next';
 
 function ListRestaurant() {
   const { loadingAccept, listRes } = useSelector((state) => state.admin)
@@ -99,7 +100,7 @@ function ListRestaurant() {
           <Row>
             <Col span={24} className='d-flex justify-content-between'>
               <Typography.Title level={4}>Danh sách nhà hàng</Typography.Title>
-              <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>Thêm nhà hàng</Button>
+              <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>{t('addNew')}</Button>
             </Col>
             <Col span={24} >
               <Table

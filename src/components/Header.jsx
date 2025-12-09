@@ -70,11 +70,11 @@ function Header() {
 			label: (
 				<Typography.Text
 					onClick={() => {
-						navigate(`/${StaffPaths.MY_RES}`);
+						navigate(`${StaffPaths.MY_RES}`);
 					}}
 				>
 					<BookOutlined className="me-2" />
-					{t("Restaurant")}
+					{t("restaurant")}
 				</Typography.Text>
 			),
 		},

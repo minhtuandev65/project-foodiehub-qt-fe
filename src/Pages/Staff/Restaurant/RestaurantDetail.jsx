@@ -93,7 +93,7 @@ export default function RestaurantDetail() {
                                             type="primary"
                                             size="large"
                                             onClick={() => {
-                                                navigate(`/${ManagerPaths.RES_TABLE.replace(':restaurantId', restaurantDetail?._id)}`)
+                                                navigate(`${StaffPaths.RES_TABLE.replace(':restaurantId', restaurantDetail?._id)}`)
                                             }}
                                             style={{
                                                 backgroundColor: '#ff6b35',
@@ -110,7 +110,7 @@ export default function RestaurantDetail() {
                                             type="primary"
                                             size="large"
                                             onClick={() => {
-                                                navigate(`/${ManagerPaths.RES_MENU.replace(':restaurantId', restaurantDetail?._id)}`)
+                                                navigate(`${StaffPaths.RES_MENU.replace(':restaurantId', restaurantDetail?._id)}`)
                                             }}
                                             style={{
                                                 backgroundColor: '#F6A572',
@@ -228,34 +228,6 @@ export default function RestaurantDetail() {
                                     </SpaceCustom>
                                 </Col>
                                 <Col span={12} className='d-flex justify-content-center'>
-                                    {/* <Title level={4} style={{ marginBottom: 16 }}>
-                                        <CommentOutlined /> {t('rate')}
-                                    </Title> */}
-                                    {/* <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
-                                        {
-                                            Cookies.get('access_token') && <>
-                                                <div className='d-flex align-items-center'>
-                                                    <Typography.Text>Đánh giá của bạn: </Typography.Text> <Rate style={{ fontSize: 50 }} value={restaurantDetail?.rating} disabled />
-                                                </div>
-                                                {
-                                                    !restaurantDetail?.rating && <Popover trigger={'click'} content={
-                                                        <Row>
-                                                            <Col span={24} className='d-flex justify-content-center'>
-                                                                <Rate style={{ fontSize: 50 }} onChange={(value) => {
-                                                                    setRating(value)
-                                                                }} />
-                                                            </Col>
-                                                            <Col span={24} loading={loadingRating} onClick={handleRating} className='d-flex justify-content-center mt-3'>
-                                                                <Button>{t('send')}</Button>
-                                                            </Col>
-                                                        </Row>
-                                                    }>
-                                                        <Button className='mt-3' style={{ width: 'fit-content' }} >{t('rating')}</Button>
-                                                    </Popover>
-                                                }
-                                            </>
-                                        }
-                                    </div> */}
                                     <Row justify={'center'} gutter={[24, 24]} style={{ width: 400, height: 'fit-content' }}>
                                         <Col >
                                             <div className='d-flex justify-content-center align-items-end mt-1'>
