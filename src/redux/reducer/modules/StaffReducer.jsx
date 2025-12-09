@@ -26,13 +26,17 @@ const initialState = {
 	},
 	loadingGetCartItems: false,
 	loadingOrderMenu: false,
+	listCartItemsStaff: {
+		cartItemsList: [],
+	},
+	loadingGetCartItemsStaff: false,
 	listTableMyRes: {
 		data: [],
 		limit: 0,
 		page: 1,
-		total: 0
+		total: 0,
 	},
-	loadingMyRestaurant: false
+	loadingMyRestaurant: false,
 };
 
 const StaffReducer = createSlice({
@@ -163,6 +167,10 @@ const StaffReducer = createSlice({
 			state.listCartItems = payload?.data?.data || [];
 			state.loadingGetCartItems = false;
 		});
+		builder.addCase(getCartItemsStaff.fulfilled, (state, { payload }) => {
+			state.listCartItemsStaff = payload?.data?.data || [];
+			state.loadingGetCartItemsStaff = false;
+		});
 		builder.addCase(orderMenu.pending, (state) => {
 			state.loadingOrderMenu = true;
 		});
@@ -190,7 +198,7 @@ const StaffReducer = createSlice({
 			state.loadingMyRestaurant = true;
 		});
 		builder.addCase(getMyRestaurant.fulfilled, (state, { payload }) => {
-			state.listTableMyRes = payload?.data?.data
+			state.listTableMyRes = payload?.data?.data;
 			state.loadingMyRestaurant = false;
 		});
 
@@ -200,13 +208,10 @@ const StaffReducer = createSlice({
 	},
 });
 
-export const getProfile = createAsyncThunk(
-	"staff/getProfile",
-	async () => {
-		const res = await StaffApi.getProfileApi();
-		return res?.data?.data;
-	}
-);
+export const getProfile = createAsyncThunk("staff/getProfile", async () => {
+	const res = await StaffApi.getProfileApi();
+	return res?.data?.data;
+});
 
 export const updateProfile = createAsyncThunk(
 	"staff/updateProfile",
@@ -328,6 +333,13 @@ export const getCartItems = createAsyncThunk(
 		return res;
 	}
 );
+export const getCartItemsStaff = createAsyncThunk(
+	"staff/getCartItemsStaff",
+	async (bookTableId) => {
+		const res = await StaffApi.getCartItemsStaffApi(bookTableId);
+		return res;
+	}
+);
 export const increaseQuantity = createAsyncThunk(
 	"staff/increaseQuantity",
 	async (cartItemsId) => {
@@ -357,8 +369,27 @@ export const getMyRestaurant = createAsyncThunk(
 		return res;
 	}
 );
-
-
+export const staffBookTable = createAsyncThunk(
+	"staff/staffBookTable",
+	async ({ restaurantId, tableId }) => {
+		const res = await StaffApi.staffBookTableApi(restaurantId, tableId);
+		return res;
+	}
+);
+export const staffCancelBookTable = createAsyncThunk(
+	"staff/staffCancelBookTable",
+	async ({ restaurantId, tableId }) => {
+		const res = await StaffApi.staffCancelBookTableApi(restaurantId, tableId);
+		return res;
+	}
+);
+export const staffCheckDoneOrder = createAsyncThunk(
+	"staff/staffCheckDoneOrder",
+	async (cartId) => {
+		const res = await StaffApi.staffCheckDoneOrderApi(cartId);
+		return res;
+	}
+);
 export const { setUser, setListCartItems } = StaffReducer.actions;
 
 export default StaffReducer.reducer;
