@@ -7,6 +7,7 @@ const USER = {
 };
 
 const RESTAURANT = {
+	MY_RES: "/my-restaurants",
 	RES_DETAIL: "/restaurant/:restaurantId",
 	RES_TABLE: "/restaurant/:restaurantId/table",
 	RES_MENU: "/restaurant/:restaurantId/menu",
