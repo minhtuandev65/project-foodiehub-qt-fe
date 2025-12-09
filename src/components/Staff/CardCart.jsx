@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { Typography, InputNumber, Button, Space, Tooltip } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -10,7 +8,7 @@ export default function CardCart({ item, onUpdateQty, onRemove }) {
 	const menuId = item.menuId ?? item.cartItemId ?? item._id ?? item.name;
 	const qty = Number(item.quantity ?? 1);
 	const unitPrice = Number(item.unitPrice ?? item.price ?? 0);
-	const total = Number(item?.totalPrice|| 0);
+	const total = Number(item?.totalPriceItem || 0);
 	const maxAvailable =
 		item.available != null ? Number(item.available) : undefined;
 
