@@ -31,7 +31,7 @@ function ListRestaurant() {
       sorter: (a, b) => a.name.localeCompare(b.name),
       render: (text, record) => {
         return <Typography.Text style={{ cursor: 'pointer' }} onClick={() => {
-          navigate(`/${ManagerPaths.RES_DETAIL.replace(':restaurantId', record?._id)}`)
+          // navigate(`/${ManagerPaths.RES_DETAIL.replace(':restaurantId', record?._id)}`)
         }} >{record?.name}</Typography.Text>
       }
     },

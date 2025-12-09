@@ -9,6 +9,7 @@ import {
 	LogoutOutlined,
 	UserOutlined,
 	BookOutlined,
+	TableOutlined,
 } from "@ant-design/icons";
 import StaffPaths from "../Paths/StaffPaths";
 import axios from "axios";
@@ -101,6 +102,19 @@ function Header() {
 				>
 					<BookOutlined className="me-2" />
 					{t("admin")}
+				</Typography.Text>
+			),
+		},
+		profileData?.role == 4 && {
+			key: "history",
+			label: (
+				<Typography.Text
+					onClick={() => {
+						navigate(`${StaffPaths.TABLE_HISTORY}`);
+					}}
+				>
+					<TableOutlined className="me-2" />
+					{t("historyBookTable")}
 				</Typography.Text>
 			),
 		},

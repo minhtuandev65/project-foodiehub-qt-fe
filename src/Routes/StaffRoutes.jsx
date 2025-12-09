@@ -8,6 +8,7 @@ import Map from "../Pages/Map/Map";
 import Menu from "../Pages/Staff/Restaurant/Menu";
 import ListTable from "../Pages/Staff/Restaurant/ListTable";
 import MenuStaff from "../Pages/Staff/Restaurant/MenuStaff";
+import BookingHistory from "../Pages/Staff/BookingHistory/BookingHistory";
 
 
 const StaffRoutes = [
@@ -20,6 +21,7 @@ const StaffRoutes = [
 	{ path: StaffPaths.RES_MAP, element: <Map /> },
 	{ path: StaffPaths.MY_RES, element: <ListTable /> },
 	{ path: StaffPaths.STAFF_ORDER, element: <MenuStaff /> },
+	{ path: StaffPaths.TABLE_HISTORY, element: <BookingHistory /> },
 
 ];
 
