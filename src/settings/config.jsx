@@ -1,5 +1,5 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-export const API_URL_PRODUCTION = import.meta.VITE_API_URL_PRODUCTION;
+export const API_URL_PRODUCTION = import.meta.env.VITE_API_URL_PRODUCTION;
 // window.API_BASE_URL = API_BASE_URL; // nếu muốn gắn global
 
 export const ROLE = {
