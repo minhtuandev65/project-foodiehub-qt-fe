@@ -20,6 +20,7 @@ import {
 } from "../../../redux/reducer/modules/StaffReducer";
 import addFood from "../../../assets/svg/addFood";
 import StaffPaths from "../../../Paths/StaffPaths";
+import dayjs from "dayjs";
 
 function BookingHistory() {
 	const { listUserBookTable } = useSelector((state) => state.staff);
@@ -78,14 +79,28 @@ function BookingHistory() {
 			},
 		},
 		{
-			title: t("status"),
-			dataIndex: "status",
-			key: "status",
-			render: (status) => {
-				let color = status === 1 ? "green" : "red";
-				let text = status === 1 ? t("empty") : t("booked");
-				return <Tag color={color}>{text}</Tag>;
+			title: 'Ngày đặt',
+			key: "date",
+			render: (date, record) => {
+				console.log(record)
+				return <Typography.Text>{dayjs(record?.date).format("DD/MM/YYYY")}</Typography.Text>;
 			},
+		},
+		{
+			title: 'Giờ đặt',
+			key: "date",
+			render: (date, record) => {
+				return <Typography.Text>{record?.startTime}</Typography.Text>;
+			},
+			width:200
+		},
+		{
+			title: 'Giờ kết thúc dự kiến',
+			key: "date",
+			render: (date, record) => {
+				return <Typography.Text>{record?.endTime}</Typography.Text>;
+			},
+			width:200
 		},
 		{
 			title: t("statusOrder"),

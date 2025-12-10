@@ -106,6 +106,7 @@ const lang_en = {
   role: 'Role',
   roleManager: 'Manager',
   user: 'User',
+  editUser:'Edit employee information'
 };
 
 
