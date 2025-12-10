@@ -125,7 +125,7 @@ export default function Menu() {
 								const matched = findByMenuId(m._id);
 								const qtyInCart = matched?.quantity ?? undefined;
 								return (
-									<Col key={m._id}>
+									<Col key={m._id} xl={8} lg={12} sm={24} >
 										<CardMenu item={m} cartQty={qtyInCart} />
 									</Col>
 								);

@@ -8,11 +8,14 @@ import { getStaff } from '../../../redux/reducer/modules/ManagerReducer';
 import dayjs from 'dayjs';
 import { PlusCircle } from 'lucide-react';
 import ModelAddUser from '../../../components/Manager/User/ModelAddUser';
+import ModelEditUser from '../../../components/Manager/User/ModelEditUser';
 
 function ListUser() {
     const { dataStaff } = useSelector((state) => state.manager)
     const { restaurantId } = useParams()
+    const [openEdit, setOpenEdit]= useState(false)
     const [open, setOpen]= useState(false)
+    const [user, setUser]= useState()
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getStaff(restaurantId))
@@ -70,9 +73,12 @@ function ListUser() {
             render: (text, record) => {
                 return <Space size="middle">
                     <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => {
-
+                        setOpenEdit(true)
+                        setUser(record)
                     }}></Button>
-                    <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
+                    <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />} onClick={()=>{
+                        
+                    }}></Button>
                 </Space>
             }
         },
@@ -99,6 +105,7 @@ function ListUser() {
                 </Card>
             </Col>
            <ModelAddUser open={open} onCancel={()=>{setOpen(false)}}/>
+            <ModelEditUser open={openEdit} onCancel={()=>{setOpenEdit(false)}} itemEdit={user}/>
         </Row>
     )
 }

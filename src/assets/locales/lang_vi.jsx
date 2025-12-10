@@ -112,7 +112,7 @@
   role:'Quyền',
   roleManager:'Quản lý',
   user:'Người dùng',
-  
+  editUser:'Sửa thông tin nhân viên'
 };
 
 
