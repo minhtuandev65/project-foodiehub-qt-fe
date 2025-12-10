@@ -163,3 +163,15 @@ export const staffCheckDoneOrderApi = async (cartId) => {
 	const res = await instance.patch(`/v1/api/cart-items/staff/${cartId}`);
 	return res;
 };
+
+export const userBookTableListApi = async () => {
+	const res = await instance.get(`/v1/api/booking/user/list`);
+	return res;
+};
+
+export const userCancelBookTableApi = async (restaurantId, tableId) => {
+	const res = await instance.patch(
+		`/v1/api/booking/user/${restaurantId}?tableId=${tableId}`
+	);
+	return res;
+};

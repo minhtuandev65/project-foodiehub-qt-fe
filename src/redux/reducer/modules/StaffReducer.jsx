@@ -37,6 +37,8 @@ const initialState = {
 		total: 0,
 	},
 	loadingMyRestaurant: false,
+	loadinggetUserBookTableList: false,
+	listUserBookTable: [],
 };
 
 const StaffReducer = createSlice({
@@ -166,6 +168,10 @@ const StaffReducer = createSlice({
 		builder.addCase(getCartItems.fulfilled, (state, { payload }) => {
 			state.listCartItems = payload?.data?.data || [];
 			state.loadingGetCartItems = false;
+		});
+		builder.addCase(getUserBookTableList.fulfilled, (state, { payload }) => {
+			state.listUserBookTable = payload?.data?.data || [];
+			state.loadinggetUserBookTableList = false;
 		});
 		builder.addCase(getCartItemsStaff.fulfilled, (state, { payload }) => {
 			state.listCartItemsStaff = payload?.data?.data || [];
@@ -387,6 +393,21 @@ export const staffCheckDoneOrder = createAsyncThunk(
 	"staff/staffCheckDoneOrder",
 	async (cartId) => {
 		const res = await StaffApi.staffCheckDoneOrderApi(cartId);
+		return res;
+	}
+);
+export const getUserBookTableList = createAsyncThunk(
+	"user/userBookTableList",
+	async () => {
+		const res = await StaffApi.userBookTableListApi();
+		return res;
+	}
+);
+
+export const userCancelBookTable = createAsyncThunk(
+	"user/userCancelBookTable",
+	async ({ restaurantId, tableId }) => {
+		const res = await StaffApi.userCancelBookTableApi(restaurantId, tableId);
 		return res;
 	}
 );
