@@ -7,7 +7,8 @@ import { t } from 'i18next';
 
 function MenuAdmin() {
     const items = [
-        { key: `/${AdminPaths.GENERAL}`, label: 'Thống kê' },
+        { key: `/${AdminPaths.GENERAL}`, label: t('dashboard') },
+        { key: `/${AdminPaths.LIST_RES}`, label: t('restaurant') },
         { key: `/${AdminPaths.LIST_USER}`, label: t("listUser") },
     ]
     const [collapsed, setCollapsed] = useState(true);
