@@ -20,21 +20,26 @@ const { Title, Text } = Typography;
 
 export default function CardMenu({ item, cartQty }) {
 	const [qtyLocal, setQtyLocal] = useState(1);
-	const dispatch= useDispatch()
-	const {restaurantId}= useParams()	
+	const dispatch = useDispatch();
+	const { restaurantId } = useParams();
 
-	useEffect(() => {
-	
-	}, [item?.quantity]);
+	useEffect(() => {}, [item?.quantity]);
 
 	useEffect(() => {
 		// if (cartQty != null) setQtyLocal(Number(cartQty) > 0 ? Number(cartQty) : 1);
 	}, [cartQty]);
 
 	// --- SỬA: truyền rõ ràng menuId, item, qty về parent ---
-	const handleAdd = async(item) => {
-		await dispatch(orderMenu({...item, restaurantId, menuId:item?._id, quantity: qtyLocal}))
-		setQtyLocal(1)
+	const handleAdd = async (item) => {
+		await dispatch(
+			orderMenu({
+				...item,
+				restaurantId,
+				menuId: item?._id,
+				quantity: qtyLocal,
+			})
+		);
+		setQtyLocal(1);
 	};
 
 	const priceText =
@@ -44,7 +49,7 @@ export default function CardMenu({ item, cartQty }) {
 	const isAvailable = Boolean(
 		item?.isAvailable ?? Number(item?.quantity ?? 0) > 0
 	);
-	
+
 	return (
 		<Card
 			hoverable
@@ -107,8 +112,8 @@ export default function CardMenu({ item, cartQty }) {
 							/>
 							<Tooltip title={isAvailable ? "Thêm vào giỏ" : "Món đã hết"}>
 								<Button
-									onClick={()=>{
-										handleAdd(item)
+									onClick={() => {
+										handleAdd(item);
 									}}
 									disabled={!isAvailable}
 									style={{

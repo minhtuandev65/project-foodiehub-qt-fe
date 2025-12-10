@@ -32,7 +32,6 @@ import {
 } from '@ant-design/icons';
 import '../../assets/css/profile.css';
 import showMessage from '../../Helper/showMessage';
-import { API_BASE_URL } from '../../settings/config'
 import { useTranslation } from "react-i18next";
 import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';

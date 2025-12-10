@@ -1,14 +1,20 @@
-import { DeleteFilled, EditFilled, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Space, Table, Typography, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
-import ModalAddRes from '../../../components/Manager/ListRestaurant/ModalAddRes';
-import ModalEditRes from '../../../components/Manager/ListRestaurant/ModalEditRes';
-import { API_BASE_URL } from '../../../settings/config';
-import { useDispatch, useSelector } from 'react-redux';
-import { handelGetRestaurant, handleSeeDetailRes } from '../../../redux/reducer/modules/ManagerReducer';
-import { Link, useNavigate } from 'react-router-dom';
-import ManagerPaths from '../../../Paths/ManagerPaths';
-import { t } from 'i18next';
+import {
+	DeleteFilled,
+	EditFilled,
+	PlusCircleOutlined,
+} from "@ant-design/icons";
+import { Button, Card, Col, Row, Space, Table, Typography, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import ModalAddRes from "../../../components/Manager/ListRestaurant/ModalAddRes";
+import ModalEditRes from "../../../components/Manager/ListRestaurant/ModalEditRes";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	handelGetRestaurant,
+	handleSeeDetailRes,
+} from "../../../redux/reducer/modules/ManagerReducer";
+import { Link, useNavigate } from "react-router-dom";
+import ManagerPaths from "../../../Paths/ManagerPaths";
+import { t } from "i18next";
 
 function ListRestaurant() {
   const { listRes } = useSelector((state) => state.manager)
@@ -69,18 +75,21 @@ function ListRestaurant() {
     },
   ];
 
-  const handleCancel = () => {
-    setOpen(false)
-  }
-  const handleCancelEdit = () => {
-    setOpenEdit(false)
-  }
+	const handleCancel = () => {
+		setOpen(false);
+	};
+	const handleCancelEdit = () => {
+		setOpenEdit(false);
+	};
 
-  const handleDetail=async(id)=>{
-    dispatch(handleSeeDetailRes(id))
-    setOpenEdit(true)
-  }
+	const handleDetail = async (id) => {
+		dispatch(handleSeeDetailRes(id));
+		setOpenEdit(true);
+	};
 
+	useEffect(() => {
+		dispatch(handelGetRestaurant());
+	}, []);
 
   useEffect(() => {
     dispatch(handelGetRestaurant())
@@ -118,4 +127,4 @@ function ListRestaurant() {
   )
 }
 
-export default ListRestaurant
+export default ListRestaurant;

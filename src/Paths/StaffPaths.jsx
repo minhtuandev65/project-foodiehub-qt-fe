@@ -12,10 +12,9 @@ const RESTAURANT = {
 	RES_TABLE: "/restaurant/:restaurantId/table",
 	RES_MENU: "/restaurant/:restaurantId/menu",
 	RES_MAP: "/map",
-	STAFF_ORDER: "/restaurant/:restaurantId/:tableId/menu",
-	TABLE_HISTORY:'/booking-history'
+	STAFF_ORDER: "/restaurant/:restaurantId/:bookTableId/menu",
+	TABLE_HISTORY: "/booking-history",
 };
-
 
 export default {
 	...USER,

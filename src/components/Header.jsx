@@ -13,11 +13,11 @@ import {
 } from "@ant-design/icons";
 import StaffPaths from "../Paths/StaffPaths";
 import axios from "axios";
-import { API_BASE_URL } from "../settings/config";
 import ManagerPaths from "../Paths/ManagerPaths";
 import AdminPaths from "../Paths/AdminPaths";
 import Cookies from "js-cookie";
 import { t } from "i18next";
+import { API_URL_PRODUCTION } from "../settings/config";
 
 function Header() {
 	const profileData = useSelector((state) => state.staff.user);
@@ -35,7 +35,7 @@ function Header() {
 
 	const handleLogout = async () => {
 		try {
-			const res = await axios.post(`${API_BASE_URL}/v1/api/auth/logout`);
+			const res = await axios.post(`${API_URL_PRODUCTION}/v1/api/auth/logout`);
 			if (res?.data?.loggedOut) {
 				Cookies.remove("access_token");
 				navigate("/login");
