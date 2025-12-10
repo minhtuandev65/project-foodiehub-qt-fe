@@ -110,8 +110,6 @@ const Profile = () => {
 
     return (
         <div className="login-page">
-           
-
             <div className="login-container" style={{ maxWidth: 800 }}>
                 {/* <Button icon={<AccountBookOutlined />} style={{position: ''}}>Ứng tuyển</Button> */}
                 <Card className="login-card">
@@ -191,8 +189,8 @@ const Profile = () => {
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Giới tính">
                                     <Space>
-                                        {profileData.gender === '1' ? <ManOutlined style={{ color: '#1890ff' }} /> : <WomanOutlined style={{ color: '#f759ab' }} />}
-                                        {profileData.gender === '2' ? 'Nam' : 'Nữ'}
+                                        {profileData.gender == '1' ? <ManOutlined style={{ color: '#1890ff' }} /> : <WomanOutlined style={{ color: '#f759ab' }} />}
+                                        {profileData.gender == '2' ? 'Nam' : 'Nữ'}
                                     </Space>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Ngày tạo">

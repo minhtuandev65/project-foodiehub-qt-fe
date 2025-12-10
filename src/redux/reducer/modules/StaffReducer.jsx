@@ -12,7 +12,9 @@ const initialState = {
 	listTableRestaurant: [],
 	loadingGetTable: false,
 	loadingLike: false,
-	dataComment: [],
+	dataComment: {
+		commentList: []
+	},
 	loadingCreateComment: false,
 	loadingGetComment: false,
 	loadingDeleteComment: false,
@@ -128,7 +130,7 @@ const StaffReducer = createSlice({
 			state.loadingCreateComment = true;
 		});
 		builder.addCase(createComment.fulfilled, (state, { payload }) => {
-			state.dataComment.commentList.push(payload?.data?.data);
+			state.dataComment.commentList = [...state.dataComment.commentList, payload?.data?.data];
 			state.loadingCreateComment = false;
 		});
 		builder.addCase(createComment.rejected, (state) => {

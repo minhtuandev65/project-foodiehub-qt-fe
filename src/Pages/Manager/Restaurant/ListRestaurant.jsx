@@ -52,16 +52,10 @@ function ListRestaurant() {
       dataIndex: 'status',
       key: 'status',
       render: (status) => {
-        let color = status === 'ACCEPT' ? 'green' : status === 'PENDING' ? 'orange' : 'red';
-        let text = status === 'ACCEPT' ? 'Đã duyệt' : status === 'PENDING' ? 'Chờ duyệt' : 'Từ chối';
+        let color = status ==1 ? 'green' : status ==2 ? 'orange' : 'red';
+        let text = status ==1 ? t('approved') : status ==2 ? t('pending') :  t('reject');
         return <Tag color={color}>{text}</Tag>;
-      },
-      filters: [
-        { text: 'Đã duyệt', value: 'approved' },
-        { text: 'Chờ duyệt', value: 'pending' },
-        { text: 'Từ chối', value: 'rejected' },
-      ],
-      onFilter: (value, record) => record.status === value,
+      }
     },
     {
       title: t('action'),
@@ -103,6 +97,7 @@ function ListRestaurant() {
             </Col>
             <Col span={24} >
               <Table
+
                 columns={columns}
                 dataSource={listRes}
                 pagination={{
@@ -110,9 +105,8 @@ function ListRestaurant() {
                   showSizeChanger: true,
                   showQuickJumper: true,
                   showTotal: (total, range) =>
-                    `${range[0]}-${range[1]} của ${total} CV`,
+                    `${range[0]}-${range[1]}`,
                 }}
-                scroll={{ x: 1000 }}
               />
             </Col>
           </Row>

@@ -1,15 +1,18 @@
-import { DeleteFilled, DeleteOutlined, EditFilled, EditOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Row, Space, Table, Tag, Typography } from 'antd'
+import { DeleteFilled, DeleteOutlined, EditFilled, EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Modal, Row, Space, Table, Tag, Typography } from 'antd'
 import { t } from 'i18next';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getStaff } from '../../../redux/reducer/modules/ManagerReducer';
 import dayjs from 'dayjs';
+import { PlusCircle } from 'lucide-react';
+import ModelAddUser from '../../../components/Manager/User/ModelAddUser';
 
 function ListUser() {
     const { dataStaff } = useSelector((state) => state.manager)
     const { restaurantId } = useParams()
+    const [open, setOpen]= useState(false)
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getStaff(restaurantId))
@@ -54,11 +57,11 @@ function ListUser() {
                 })
             }
         },
-         {
+        {
             title: t('gender'),
             key: 'gender',
             render: (text, record, index) => {
-                return <Typography.Text>{record?.gender == 1 ? t('male'):  t('female')}</Typography.Text>
+                return <Typography.Text>{record?.gender == 1 ? t('male') : t('female')}</Typography.Text>
             }
         },
         {
@@ -66,7 +69,7 @@ function ListUser() {
             key: 'action',
             render: (text, record) => {
                 return <Space size="middle">
-                    <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => { 
+                    <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => {
 
                     }}></Button>
                     <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
@@ -75,7 +78,10 @@ function ListUser() {
         },
     ];
     return (
-        <Row className='mt-0 me-0 mt-5'>
+        <Row className='mt-0 me-0 mt-5' gutter={[12,12]}>
+            <Col span={24}  className='d-flex justify-content-end'>
+            <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>{t('addNew')}</Button>
+            </Col>
             <Col span={24}>
                 <Card title={`${t('listStaff')}`} className="table-card">
                     <Table
@@ -92,6 +98,7 @@ function ListUser() {
                     />
                 </Card>
             </Col>
+           <ModelAddUser open={open} onCancel={()=>{setOpen(false)}}/>
         </Row>
     )
 }

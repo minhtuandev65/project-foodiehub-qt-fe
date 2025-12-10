@@ -21,6 +21,7 @@ export default function RestaurantDetail() {
     const dispatch = useDispatch()
     const { restaurantDetail, dataComment, loadingCreateComment, loadingGetComment } = useSelector((state) => state.manager)
     const profileData = useSelector((state) => state.staff.user);
+    const [rating, setRating] = useState(0)
     const navigate = useNavigate()
     const { restaurantId } = useParams()
     useEffect(() => {
@@ -69,7 +70,7 @@ export default function RestaurantDetail() {
                                 </div>
 
                                 <Space direction="vertical" size={12} style={{ width: '100%' }}>
-                                    <Space style={{cursor:'pointer'}} title={t('seeMap')} onClick={()=>{
+                                    <Space style={{ cursor: 'pointer' }} title={t('seeMap')} onClick={() => {
                                         navigate(`${StaffPaths.RES_MAP}?lat=${restaurantDetail?.lat}&lng=${restaurantDetail?.lng}`)
                                     }}>
                                         <EnvironmentOutlined style={{ color: '#ff4d4f' }} />
@@ -115,7 +116,7 @@ export default function RestaurantDetail() {
                                             <img src='/images/menu.png' style={{ width: '80%', height: '80%' }} />
                                             {t('menu')}
                                         </Button>
-                                         <Button
+                                        <Button
                                             type="primary"
                                             size="large"
                                             onClick={() => {
@@ -129,7 +130,7 @@ export default function RestaurantDetail() {
                                                 paddingRight: 32
                                             }}
                                         >
-                                           <img src='/images/staff.png' style={{ width: '80%', height: '80%' }} />
+                                            <img src='/images/staff.png' style={{ width: '80%', height: '80%' }} />
                                             {t('staff')}
                                         </Button>
                                     </Space>
@@ -237,45 +238,41 @@ export default function RestaurantDetail() {
                                     </SpaceCustom>
                                 </Col>
                                 <Col span={12} className='d-flex justify-content-center'>
-                                    {/* <Title level={4} style={{ marginBottom: 16 }}>
-                                        <CommentOutlined /> {t('rate')}
-                                    </Title> */}
-                                    {/* <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
-                                        {
-                                            Cookies.get('access_token') && <>
-                                                <div className='d-flex align-items-center'>
-                                                    <Typography.Text>Đánh giá của bạn: </Typography.Text> <Rate style={{ fontSize: 50 }} value={restaurantDetail?.rating} disabled />
-                                                </div>
-                                                {
-                                                    !restaurantDetail?.rating && <Popover trigger={'click'} content={
-                                                        <Row>
-                                                            <Col span={24} className='d-flex justify-content-center'>
-                                                                <Rate style={{ fontSize: 50 }} onChange={(value) => {
-                                                                    setRating(value)
-                                                                }} />
-                                                            </Col>
-                                                            <Col span={24} loading={loadingRating} onClick={handleRating} className='d-flex justify-content-center mt-3'>
-                                                                <Button>{t('send')}</Button>
-                                                            </Col>
-                                                        </Row>
-                                                    }>
-                                                        <Button className='mt-3' style={{ width: 'fit-content' }} >{t('rating')}</Button>
-                                                    </Popover>
-                                                }
-                                            </>
-                                        }
-                                    </div> */}
                                     <Row justify={'center'} gutter={[24, 24]} style={{ width: 400, height: 'fit-content' }}>
                                         <Col >
                                             <div className='d-flex justify-content-center align-items-end mt-1'>
                                                 <RatingText className='mb-0' style={{ lineHeight: 1, fontSize: '50px !important' }}>{restaurantDetail?.ratingAverage}</RatingText>
-                                                <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='mb-0'>/{restaurantDetail?.ratingAverage}</Typography.Title>
+                                                <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='mb-0'>/5</Typography.Title>
                                             </div>
                                         </Col>
                                         <Col >
                                             <div className='d-flex flex-column justify-content-end h-100'>
-                                                <Rate style={{ fontSize: 20 }} value={restaurantDetail?.ratingAverage} disabled />
+                                                <Rate style={{ fontSize: 20 }} allowHalf value={restaurantDetail?.ratingAverage} disabled />
                                                 <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='m-0'>{restaurantDetail?.reviewCount} {t('countRating').toLowerCase()}</Typography.Title>
+                                            </div>
+                                        </Col>
+                                        <Col span={24} className='d-flex justify-content-center '>
+                                            <div className='d-flex flex-column align-items-center '>
+                                                <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='m-0'>{t('youThinkRestaurant')} ?</Typography.Title>
+                                                {
+                                                    Cookies.get('access_token') && <>
+                                                        <div className='d-flex align-items-center'>
+                                                            <Rate style={{ fontSize: 50 }} value={restaurantDetail?.rating} disabled />
+                                                        </div>
+                                                        {
+                                                            !restaurantDetail?.rating && <Popover trigger={'click'} content={
+                                                                <Row>
+                                                                    <Col span={24} className='d-flex justify-content-center'>
+                                                                        <Rate style={{ fontSize: 50 }} onChange={(value) => {
+                                                                            setRating(value)
+                                                                        }} />
+                                                                    </Col>
+                                                                </Row>
+                                                            }>
+                                                            </Popover>
+                                                        }
+                                                    </>
+                                                }
                                             </div>
                                         </Col>
                                     </Row>
