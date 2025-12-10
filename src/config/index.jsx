@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../settings/config';
 
 const instance = axios.create({
     // baseURL: window.location.hostname === 'localhost' ? 'http://localhost:5001/api/v1' : 'https://api.mysite.com/api/v1'
-    baseURL: API_BASE_URL
+    baseURL: API_URL_PRODUCTION ? API_BASE_URL
 });
 instance.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 
