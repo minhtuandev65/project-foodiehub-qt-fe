@@ -1,6 +1,6 @@
 import React from "react";
 import ManagerGeneral from "../Pages/Manager/ManagerDashboard/ManagerGeneral";
-import ListUser from "../Pages/Manager/ListUser/ListUser";
+import ListUser from "../Pages/Admin/ListUser";
 import ListCV from "../Pages/Manager/ListCV/ListCV";
 import ListRestaurant from "../Pages/Admin/ListRestaurant/ListRestaurant";
 import AdminPaths from "../Paths/AdminPaths";

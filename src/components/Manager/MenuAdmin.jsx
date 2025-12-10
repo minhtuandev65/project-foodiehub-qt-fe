@@ -3,13 +3,12 @@ import { Button, Menu } from 'antd'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AdminPaths from '../../Paths/AdminPaths';
+import { t } from 'i18next';
 
 function MenuAdmin() {
     const items = [
         { key: `/${AdminPaths.GENERAL}`, label: 'Thống kê' },
-        { key: `/${AdminPaths.LIST_CV}`, label: 'Danh sách nộp cv' },
-        { key: `/${AdminPaths.LIST_USER}`, label: 'Nhân viên' },
-        { key: `/${AdminPaths.LIST_RES}`, label: 'Nhà hàng' },
+        { key: `/${AdminPaths.LIST_USER}`, label: t("listUser") },
     ]
     const [collapsed, setCollapsed] = useState(true);
     const toggleCollapsed = () => {

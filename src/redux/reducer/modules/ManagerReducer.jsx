@@ -15,8 +15,8 @@ const initialState = {
     loadingCreateComment: false,
     loadingGetComment: false,
     loadingDeleteComment: false,
-    loadingGetStaff:false,
-    dataStaff:[]
+    loadingGetStaff: false,
+    dataStaff: []
 }
 
 const ManagerReducer = createSlice({
@@ -67,27 +67,36 @@ const ManagerReducer = createSlice({
         builder.addCase(getRestaurantDetail.rejected, (state) => {
             state.loadingDetailRestaurant = false;
         }),
-        builder.addCase(createComment.pending, (state) => {
+            builder.addCase(createComment.pending, (state) => {
                 state.loadingCreateComment = true;
-        })
+            })
         builder.addCase(createComment.fulfilled, (state, { payload }) => {
-            state.dataComment.commentList.push(payload?.data?.data)
+            state.dataComment.commentList = [...state.dataComment.commentList, payload?.data?.data];
             state.loadingCreateComment = false;
         })
         builder.addCase(createComment.rejected, (state) => {
             state.loadingCreateComment = false;
         }),
-        builder.addCase(getStaff.pending, (state) => {
+            builder.addCase(getStaff.pending, (state) => {
                 state.loadingGetStaff = true;
-        })
+            })
         builder.addCase(getStaff.fulfilled, (state, { payload }) => {
-            console.log(payload)
-            state.dataStaff= payload.data.data
+            state.dataStaff = payload.data.data
             state.loadingGetStaff = false;
         })
         builder.addCase(getStaff.rejected, (state) => {
             state.loadingGetStaff = false;
         })
+        builder.addCase(getComments.pending, (state) => {
+            state.loadingGetComment = true;
+        });
+        builder.addCase(getComments.fulfilled, (state, { payload }) => {
+            state.dataComment = payload?.data?.data;
+            state.loadingGetComment = false;
+        });
+        builder.addCase(getComments.rejected, (state) => {
+            state.loadingGetComment = false;
+        });
     },
 });
 
@@ -139,7 +148,7 @@ export const createTable = createAsyncThunk('manager/createTable', async ({ rest
     return res
 })
 
-export const createComment = createAsyncThunk('staff/createComment', async (data) => {
+export const createComment = createAsyncThunk('manager/createComment', async (data) => {
     const res = await ManagerAPI.createCommentApi(data);
     return res
 })

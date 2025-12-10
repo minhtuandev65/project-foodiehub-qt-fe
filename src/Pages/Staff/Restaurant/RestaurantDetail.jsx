@@ -21,6 +21,7 @@ export default function RestaurantDetail() {
     const [rating, setRating] = useState(0)
     const dispatch = useDispatch()
     const { restaurantDetail, dataComment, loadingCreateComment, loadingGetComment, loadingRating } = useSelector((state) => state.staff)
+    // console.log(loadingCreateComment)
     const profileData = useSelector((state) => state.staff.user);
     const navigate = useNavigate()
     const { restaurantId } = useParams()
@@ -74,7 +75,7 @@ export default function RestaurantDetail() {
                                 </div>
 
                                 <Space direction="vertical" size={12} style={{ width: '100%' }}>
-                                    <Space style={{cursor:'pointer'}} title={t('seeMap')} onClick={()=>{
+                                    <Space style={{ cursor: 'pointer' }} title={t('seeMap')} onClick={() => {
                                         navigate(`${StaffPaths.RES_MAP}?lat=${restaurantDetail?.lat}&lng=${restaurantDetail?.lng}`)
                                     }}>
                                         <EnvironmentOutlined style={{ color: '#ff4d4f' }} />
@@ -232,12 +233,12 @@ export default function RestaurantDetail() {
                                         <Col >
                                             <div className='d-flex justify-content-center align-items-end mt-1'>
                                                 <RatingText className='mb-0' style={{ lineHeight: 1, fontSize: '50px !important' }}>{restaurantDetail?.ratingAverage}</RatingText>
-                                                <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='mb-0'>/{restaurantDetail?.ratingAverage}</Typography.Title>
+                                                <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='mb-0'>/5</Typography.Title>
                                             </div>
                                         </Col>
                                         <Col >
                                             <div className='d-flex flex-column justify-content-end h-100'>
-                                                <Rate style={{ fontSize: 20 }} value={restaurantDetail?.ratingAverage} disabled />
+                                                <Rate style={{ fontSize: 20 }} allowHalf value={restaurantDetail?.ratingAverage} disabled />
                                                 <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='m-0'>{restaurantDetail?.reviewCount} {t('countRating').toLowerCase()}</Typography.Title>
                                             </div>
                                         </Col>

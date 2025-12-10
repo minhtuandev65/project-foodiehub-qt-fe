@@ -105,6 +105,14 @@
   historyBookTable:'Lịch sử đặt bàn',
   restaurantName:'Tên nhà hàng',
   statusOrder:'Trạng thái món',
+  pending: 'Chờ duyệt',
+  approved:'Đã duyệt',
+  reject:'Từ chối',
+  listUser:'Danh sách người dùng',
+  role:'Quyền',
+  roleManager:'Quản lý',
+  user:'Người dùng',
+  
 };
 
 
