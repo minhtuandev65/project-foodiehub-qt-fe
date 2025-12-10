@@ -22,7 +22,6 @@ import {
 } from '@ant-design/icons';
 import '../../assets/css/login.css';
 import showMessage from '../../Helper/showMessage';
-import { API_BASE_URL } from '../../settings/config'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from 'react-redux';

@@ -9,7 +9,6 @@ import { Button, Card, Col, Row, Space, Table, Typography, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 import ModalAddRes from "../../../components/Manager/ListRestaurant/ModalAddRes";
 import ModalEditRes from "../../../components/Manager/ListRestaurant/ModalEditRes";
-import { API_BASE_URL } from "../../../settings/config";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSeeDetailRes } from "../../../redux/reducer/modules/ManagerReducer";
 import { Link, useNavigate } from "react-router-dom";

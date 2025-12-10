@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { API_BASE_URL } from '../../settings/config'
+import { API_URL_PRODUCTION } from '../../settings/config'
 
 function Verification() {
     const [searchParam] = useSearchParams()
@@ -9,7 +9,7 @@ function Verification() {
 
     const handleVerification = async () => {
         try {
-            const res = await axios.post(`${API_BASE_URL}/v1/api/auth/verifyEmail`, {
+            const res = await axios.post(`${API_URL_PRODUCTION}/v1/api/auth/verifyEmail`, {
                 email: searchParam.get('email'),
                 token: searchParam.get('token')
             })
