@@ -7,7 +7,7 @@ import { t } from 'i18next';
 
 function MenuManager() {
     const items = [
-        { key: `/${ManagerPaths.GENERAL}`, label: t('dashboard') },
+        // { key: `/${ManagerPaths.GENERAL}`, label: t('dashboard') },
         { key: `/${ManagerPaths.LIST_RES}`, label: t('restaurant') },
     ]
     const [collapsed, setCollapsed] = useState(true);

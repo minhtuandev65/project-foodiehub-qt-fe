@@ -6,12 +6,12 @@ export const getListRestaurant=async()=>{
 }
 
 export const createNewRestaurant=async(value)=>{
-    const res = instance.post('/v1/api/clients/manager/restaurant/createNewRestaurant', value)
+    const res = instance.post('/v1/api/restaurant/manager/restaurants', value)
     return res
 }
 
 export const editRestaurant= async(id, values)=>{
-    const res = instance.put(`/v1/api/clients/manager/restaurant/${id}/update`, values)
+    const res = instance.put(`/v1/api/restaurant/manager/${id}/restaurants`, values)
     return res
 }
 export const detailRestaurant=async(id)=>{
@@ -19,7 +19,7 @@ export const detailRestaurant=async(id)=>{
     return res
 }
 
-export const getListTable=async(restaurantId)=>{
+export const getListTable=async()=>{
     const res = instance.get('/v1/api/restaurant/manager/list')
     return res
 }
@@ -52,5 +52,21 @@ export const deleteCommentApi=async(commentId)=>{
 
 export const getStaffApi= async(restaurantId)=>{
     const res = await instance.get(`/v1/api/restaurant/manager/${restaurantId}/staff`)
+    return res
+}
+
+export const addStaffRestaurantApi=async(data)=>{
+    const {restaurantId}= data
+    const res = await instance.post(`/v1/api/restaurant/manager/${restaurantId}/staff`, data)
+    return res
+}
+
+export const deleteStaffRestaurantApi= async(staffId)=>{
+    const res= await instance.delete(`/v1/api/restaurant/manager/${staffId}/staff`)
+    return res
+}
+
+export const deleteRestaurantApi=async(restaurantId)=>{
+     const res= await instance.delete(`/v1/api/restaurant/manager/${restaurantId}/delete`)
     return res
 }

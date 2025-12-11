@@ -321,7 +321,7 @@ function ModalAddRes({ open, onCancel, itemEdit }) {
 
                 {/* Logo */}
                 <Form.Item
-                    label="Logo nhà hàng"
+                    label="Hình ảnh nhà hàng"
                     name="logoURL"
                 >
                     <Upload

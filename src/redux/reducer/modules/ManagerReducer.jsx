@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import * as  ManagerAPI from '../../api/ManagerApi'
 import showMessage from '../../../Helper/showMessage'
 
@@ -16,7 +16,9 @@ const initialState = {
     loadingGetComment: false,
     loadingDeleteComment: false,
     loadingGetStaff: false,
-    dataStaff: []
+    dataStaff: [],
+    loadingAddStaff: false,
+    loadingDeleteStaff: false
 }
 
 const ManagerReducer = createSlice({
@@ -96,7 +98,18 @@ const ManagerReducer = createSlice({
         });
         builder.addCase(getComments.rejected, (state) => {
             state.loadingGetComment = false;
+        })
+         builder.addCase(addStaffRestaurant.pending, (state) => {
+            state.loadingAddStaff = true;
         });
+        builder.addCase(addStaffRestaurant.fulfilled, (state, { payload }) => {
+            state.dataStaff.staffList = [...state.dataStaff.staffList, payload?.data?.data];
+            state.loadingAddStaff = false;
+        });
+        builder.addCase(addStaffRestaurant.rejected, (state, {payload}) => {
+            state.loadingAddStaff = false;
+            showMessage(payload?.message, 'error')
+        })
     },
 });
 
@@ -121,7 +134,6 @@ export const handleCreateNewRestaurant = createAsyncThunk('manager/create-new-re
 export const handleSeeDetailRes = createAsyncThunk('manager/see-detail-res', async (id) => {
     try {
         const res = await ManagerAPI.detailRestaurant(id)
-        console.log(res?.data)
         return res
     } catch (error) {
         console.log(error)
@@ -181,6 +193,44 @@ export const getStaff = createAsyncThunk(
         }
     }
 );
+
+export const addStaffRestaurant = createAsyncThunk(
+    'staff/addStaff',
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await ManagerAPI.addStaffRestaurantApi(data);
+            return res;
+        } catch (error) {
+            console.log(error.response?.data)
+            return rejectWithValue(error.response?.data);
+        }
+    }
+);
+
+export const deleteStaffRestaurant = createAsyncThunk(
+    'staff/deleteStaff',
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await ManagerAPI.deleteStaffRestaurantApi(data);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
+export const deleteRestaurant = createAsyncThunk(
+    'staff/deleteRestaurant',
+    async (data, { rejectWithValue }) => {
+        try {
+            const res = await ManagerAPI.deleteRestaurantApi(data);
+            return res;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error);
+        }
+    }
+);
+
 
 export const { setUser } = ManagerReducer.actions
 

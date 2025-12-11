@@ -40,7 +40,7 @@ function HomeNotAuth() {
         <Row gutter={[24, 24]}>
           {
             restaurants?.restaurantList?.map((item, index) => {
-              return <Col span={6} key={index}>
+              return <Col  xl={6} lg={8} sm={12} xs={24}  key={index}>
                 <CardRes item={item} />
               </Col>
             })

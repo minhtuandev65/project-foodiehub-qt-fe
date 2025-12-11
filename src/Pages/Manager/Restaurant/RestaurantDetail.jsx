@@ -21,7 +21,7 @@ export default function RestaurantDetail() {
     const dispatch = useDispatch()
     const { restaurantDetail, dataComment, loadingCreateComment, loadingGetComment } = useSelector((state) => state.manager)
     const profileData = useSelector((state) => state.staff.user);
-    const [rating, setRating] = useState(0)
+    // const [rating, setRating] = useState(0)
     const navigate = useNavigate()
     const { restaurantId } = useParams()
     useEffect(() => {
@@ -241,7 +241,7 @@ export default function RestaurantDetail() {
                                     <Row justify={'center'} gutter={[24, 24]} style={{ width: 400, height: 'fit-content' }}>
                                         <Col >
                                             <div className='d-flex justify-content-center align-items-end mt-1'>
-                                                <RatingText className='mb-0' style={{ lineHeight: 1, fontSize: '50px !important' }}>{restaurantDetail?.ratingAverage}</RatingText>
+                                                <RatingText className='mb-0' style={{ lineHeight: 1, fontSize: '50px !important' }}>{restaurantDetail?.ratingAverage || 0}</RatingText>
                                                 <Typography.Title level={5} style={{ color: '#4f4f4f' }} className='mb-0'>/5</Typography.Title>
                                             </div>
                                         </Col>
@@ -263,8 +263,8 @@ export default function RestaurantDetail() {
                                                             !restaurantDetail?.rating && <Popover trigger={'click'} content={
                                                                 <Row>
                                                                     <Col span={24} className='d-flex justify-content-center'>
-                                                                        <Rate style={{ fontSize: 50 }} onChange={(value) => {
-                                                                            setRating(value)
+                                                                        <Rate style={{ fontSize: 50 }} onChange={() => {
+                                                                            // setRating(value)
                                                                         }} />
                                                                     </Col>
                                                                 </Row>

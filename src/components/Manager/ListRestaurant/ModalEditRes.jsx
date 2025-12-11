@@ -282,7 +282,7 @@ function ModalAddRes({ open, onCancel }) {
 				</Form.Item>
 
 				{/* Logo */}
-				<Form.Item label="Logo nhà hàng" name="logoURL">
+				<Form.Item label="Hình ảnh nhà hàng" name="logoURL">
 					{/* <Upload
                         disabled={true }
                         {...uploadProps}

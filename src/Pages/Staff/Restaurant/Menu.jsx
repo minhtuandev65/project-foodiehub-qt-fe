@@ -24,7 +24,6 @@ export default function Menu() {
 	const { listMenu, listCartItems } = useSelector((s) => s.staff);
 	const [localCart, setLocalCart] = useState([]); // store items keyed by menuId
 	const [drawerOpen, setDrawerOpen] = useState(false);
-	console.log(listCartItems);
 	// Normalize server cart item -> local shape, sử dụng menuId nếu server trả
 	const normalizeServerCartItem = (srv) => {
 		const qty = Number(srv.quantity ?? 1);
@@ -75,6 +74,7 @@ export default function Menu() {
 				return {
 					...itemA,
 					quantity: itemA.quantity + choose,
+					totalPriceItem: itemA?.totalPriceItem + (choose*itemA?.price)
 				};
 			}
 			return itemA;

@@ -9,6 +9,7 @@ import ModalAddRes from "../../../components/Manager/ListRestaurant/ModalAddRes"
 import ModalEditRes from "../../../components/Manager/ListRestaurant/ModalEditRes";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  deleteRestaurant,
 	handelGetRestaurant,
 	handleSeeDetailRes,
 } from "../../../redux/reducer/modules/ManagerReducer";
@@ -69,7 +70,9 @@ function ListRestaurant() {
       render: (text, record) => {
         return <Space size="middle">
           <Button type="text" size="small" icon={<EditFilled style={{ color: 'green' }} />} onClick={() => { handleDetail (record?._id) }}></Button>
-          <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />}></Button>
+          <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} onClick={()=>{
+            dispatch(deleteRestaurant(record?._id))
+          }} />}></Button>
         </Space>
       }
     },

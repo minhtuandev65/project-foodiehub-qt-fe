@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getStaff } from '../../../redux/reducer/modules/ManagerReducer';
+import { deleteStaffRestaurant, getStaff } from '../../../redux/reducer/modules/ManagerReducer';
 import dayjs from 'dayjs';
 import { PlusCircle } from 'lucide-react';
 import ModelAddUser from '../../../components/Manager/User/ModelAddUser';
@@ -13,9 +13,9 @@ import ModelEditUser from '../../../components/Manager/User/ModelEditUser';
 function ListUser() {
     const { dataStaff } = useSelector((state) => state.manager)
     const { restaurantId } = useParams()
-    const [openEdit, setOpenEdit]= useState(false)
-    const [open, setOpen]= useState(false)
-    const [user, setUser]= useState()
+    const [openEdit, setOpenEdit] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [user, setUser] = useState()
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(getStaff(restaurantId))
@@ -76,17 +76,17 @@ function ListUser() {
                         setOpenEdit(true)
                         setUser(record)
                     }}></Button>
-                    <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />} onClick={()=>{
-                        
+                    <Button type="dashed" size="small" icon={<DeleteFilled style={{ color: 'red' }} />} onClick={() => {
+                        dispatch(deleteStaffRestaurant(record?._id))
                     }}></Button>
                 </Space>
             }
         },
     ];
     return (
-        <Row className='mt-0 me-0 mt-5' gutter={[12,12]}>
-            <Col span={24}  className='d-flex justify-content-end'>
-            <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>{t('addNew')}</Button>
+        <Row className='mt-0 me-0 mt-5' gutter={[12, 12]}>
+            <Col span={24} className='d-flex justify-content-end'>
+                <Button onClick={() => { setOpen(true) }} icon={<PlusCircleOutlined />}>{t('addNew')}</Button>
             </Col>
             <Col span={24}>
                 <Card title={`${t('listStaff')}`} className="table-card">
@@ -104,8 +104,8 @@ function ListUser() {
                     />
                 </Card>
             </Col>
-           <ModelAddUser open={open} onCancel={()=>{setOpen(false)}}/>
-            <ModelEditUser open={openEdit} onCancel={()=>{setOpenEdit(false)}} itemEdit={user}/>
+            <ModelAddUser open={open} onCancel={() => { setOpen(false) }} />
+            <ModelEditUser open={openEdit} onCancel={() => { setOpenEdit(false) }} itemEdit={user} />
         </Row>
     )
 }

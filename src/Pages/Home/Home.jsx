@@ -9,12 +9,13 @@ import '../../assets/css/homepage.css'
 import Cookies from 'js-cookie';
 import HomeAuth from './HomeAuth/HomeAuth';
 import HomeNotAuth from './HomeNotAuth/HomeNotAuth';
+import Search from 'antd/es/input/Search';
 
 function Home() {
     return (
         <Row id='home-page'>
-            <Col span={24} className='px-0' style={{height:'100vh'}}>
-                <Swiper className='w-100' style={{height:'100vh'}}
+            <Col span={24} className='px-0' style={{ height: '80vh' }}>
+                <Swiper className='w-100' style={{ height: '80vh' }}
                     modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectFade]}
                     effect={'fade'}
                     autoplay={{
@@ -26,20 +27,20 @@ function Home() {
                     pagination={{ clickable: true }}
                 >
                     <SwiperSlide className='w-100 h-100' >
-                        <img className='w-100 h-100' src='/images/banner.png'  alt="" />
+                        <img style={{ objectFit: 'cover' }} className='w-100 h-100' src='/images/banner.png' alt="" />
                     </SwiperSlide>
                     <SwiperSlide className='w-100 h-100'>
-                       <img className='w-100 h-100' src='/images/banner.png'  alt="" />
+                       <img style={{ objectFit: 'cover' }} className='w-100 h-100' src='/images/banner2.jpg'  alt="" />
                     </SwiperSlide>
                     <SwiperSlide className='w-100 h-100'>
-                        <img className='w-100 h-100' src='/images/banner.png'  alt="" />
+                        <img  style={{ objectFit: 'cover' }} className='w-100 h-100' src='/images/banner3.jpg'  alt="" />
                     </SwiperSlide>
                 </Swiper>
             </Col>
             <Col span={24}>
-                    {
-                        Cookies.get('access_token') ? <HomeAuth/> : <HomeNotAuth/>
-                    }
+                {
+                    Cookies.get('access_token') ? <HomeAuth /> : <HomeNotAuth />
+                }
             </Col>
         </Row>
     )
