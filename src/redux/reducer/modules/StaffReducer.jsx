@@ -201,6 +201,7 @@ const StaffReducer = createSlice({
 
 		builder.addCase(orderMenu.rejected, (state, { payload }) => {
 			state.loadingOrderMenu = false;
+			showMessage(payload?.message, 'error')
 		});
 		builder.addCase(getMyRestaurant.pending, (state) => {
 			state.loadingMyRestaurant = true;
@@ -213,6 +214,10 @@ const StaffReducer = createSlice({
 		builder.addCase(getMyRestaurant.rejected, (state, { payload }) => {
 			state.loadingMyRestaurant = false;
 		});
+		// builder.addCase(increaseQuantity.fulfilled, (state, { payload }) => {
+		// 	state.listTableMyRes = payload?.data?.data;
+		// 	state.loadingMyRestaurant = false;
+		// })
 	},
 });
 
@@ -330,9 +335,13 @@ export const getListMenu = createAsyncThunk(
 	}
 );
 
-export const orderMenu = createAsyncThunk("staff/orderMenu", async (data) => {
-	const res = await StaffApi.orderMenuApi(data);
-	return res;
+export const orderMenu = createAsyncThunk("staff/orderMenu", async (data, { rejectWithValue }) => {
+	try {
+		const res = await StaffApi.orderMenuApi(data);
+		return res;
+	} catch (error) {
+		return rejectWithValue(error.response?.data || error);
+	}
 });
 export const getCartItems = createAsyncThunk(
 	"staff/getCartItems",

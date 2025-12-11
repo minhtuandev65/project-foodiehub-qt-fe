@@ -16,7 +16,8 @@ const initialState = {
     },
     userData: {},
     loadingGetUserData: false,
-    loadingLock: false
+    loadingLock: false,
+    loadingChangeRole: false
 }
 
 const AdminReducer = createSlice({
@@ -66,6 +67,25 @@ const AdminReducer = createSlice({
         builder.addCase(getUserDetail.rejected, (state, { payload }) => {
             state.loadingGetUserData = false
         })
+        builder.addCase(unLockUser.pending, (state) => {
+            state.loadingLock = true
+        })
+        builder.addCase(unLockUser.fulfilled, (state, { payload }) => {
+            const indexFind = current(state.dataStaff.userList).findIndex(
+                (item) => item?._id == payload?.data?.data?._id
+            );
+            if (indexFind !== -1) {
+                // update item
+                state.dataStaff.userList[indexFind] = payload?.data?.data;
+            } else {
+                // add new item
+                state.dataStaff.userList[indexFind] = payload?.data?.data;
+            }
+            state.loadingLock = false
+        })
+        builder.addCase(unLockUser.rejected, (state, { payload }) => {
+            state.loadingLock = false
+        })
         builder.addCase(lockUser.pending, (state) => {
             state.loadingLock = true
         })
@@ -84,6 +104,21 @@ const AdminReducer = createSlice({
         })
         builder.addCase(lockUser.rejected, (state, { payload }) => {
             state.loadingLock = false
+        })
+        builder.addCase(changeRole.pending, (state) => {
+            state.loadingChangeRole = true
+        })
+        builder.addCase(changeRole.fulfilled, (state, { payload }) => {
+            const indexFind = current(state.dataStaff.userList).findIndex(
+                (item) => item?._id == payload?.data?.data?.userId
+            );
+            if (indexFind !== -1) {
+                state.dataStaff.userList[indexFind].role = payload?.data?.data?.role;
+            }
+            state.loadingChangeRole = false
+        })
+        builder.addCase(changeRole.rejected, (state, { payload }) => {
+            state.loadingChangeRole = false
         })
     },
 });
@@ -132,6 +167,26 @@ export const lockUser = createAsyncThunk('manager/lock-user', async (userId) => 
         console.log(error)
     }
 })
+
+export const unLockUser = createAsyncThunk('manager/un-lock-user', async (userId) => {
+    try {
+        const res = await AdminApi.unLockUserApi(userId)
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+export const changeRole = createAsyncThunk('manager/changeRole', async (data) => {
+    try {
+        const res = await AdminApi.changeRoleApi(data)
+        return res
+    } catch (error) {
+        console.log(error)
+    }
+})
+
+
 
 
 

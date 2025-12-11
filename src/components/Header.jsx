@@ -2,7 +2,7 @@ import { Avatar, Button, Col, Dropdown, Row, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import "../assets/css/header.css";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
 	SearchOutlined,
 	BellOutlined,
@@ -10,18 +10,20 @@ import {
 	UserOutlined,
 	BookOutlined,
 	TableOutlined,
+	LoadingOutlined,
 } from "@ant-design/icons";
 import StaffPaths from "../Paths/StaffPaths";
-import axios from "axios";
 import ManagerPaths from "../Paths/ManagerPaths";
 import AdminPaths from "../Paths/AdminPaths";
 import Cookies from "js-cookie";
 import { t } from "i18next";
 import { API_URL_PRODUCTION } from "../settings/config";
+import { handleLogout, handelLogin } from "../redux/reducer/modules/AuthReducer";
 
 function Header() {
 	const profileData = useSelector((state) => state.staff.user);
-
+	const {loadingLogout}= useSelector((state)=> state.auth)
+	const dispatch = useDispatch()
 	const [isAtTop, setIsAtTop] = useState(true);
 
 	useEffect(() => {
@@ -33,23 +35,21 @@ function Header() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const handleLogout = async () => {
-		try {
-			const res = await axios.post(`${API_URL_PRODUCTION}/v1/api/auth/logout`);
-			if (res?.data?.loggedOut) {
-				Cookies.remove("access_token");
-				navigate("/login");
-			}
-		} catch (error) {
-			console.log(error);
+	const handleLogoutUi = async () => {
+		const result = await dispatch(handleLogout())
+		if(result?.payload?.status=='success'){
+			navigate('/login')
 		}
 	};
 	const menu = [
 		{
 			key: "logout",
 			label: (
-				<Typography.Text onClick={handleLogout}>
-					<LogoutOutlined className="me-2" /> {t("logout")}
+				<Typography.Text onClick={handleLogoutUi}>
+					{
+						loadingLogout ? <LoadingOutlined className="me-2"/> : <LogoutOutlined className="me-2" /> 
+					}
+					{t("logout")}
 				</Typography.Text>
 			),
 		},
@@ -84,7 +84,7 @@ function Header() {
 			label: (
 				<Typography.Text
 					onClick={() => {
-						navigate(`/${ManagerPaths.GENERAL}`);
+						navigate(`/${ManagerPaths.LIST_RES}`);
 					}}
 				>
 					<BookOutlined className="me-2" />
@@ -97,7 +97,7 @@ function Header() {
 			label: (
 				<Typography.Text
 					onClick={() => {
-						navigate(`/${AdminPaths.GENERAL}`);
+						navigate(`/${AdminPaths.LIST_RES}`);
 					}}
 				>
 					<BookOutlined className="me-2" />
@@ -123,7 +123,7 @@ function Header() {
 	return (
 		<Row
 			id="header"
-			style={{ background: "rgba(0,0,0,0.08)" }}
+			style={{ background: !isAtTop ? "rgba(0,0,0,0.5)"  :  "rgba(0,0,0,0.08)" }}
 			className={!isAtTop ? "header-scroll" : ""}
 		>
 			<Col span={24}>
@@ -143,12 +143,12 @@ function Header() {
 							<div className="d-flex justify-content-end align-items-center h-100">
 								<Button
 									type="text"
-									icon={<SearchOutlined style={{ fontSize: 25 }} />}
+									icon={<SearchOutlined style={{ fontSize: 25,  color: isAtTop ? '#4f4f4f' : '#fff' }} />}
 								></Button>
 								<Button
 									type="text"
 									className="mx-4"
-									icon={<BellOutlined style={{ fontSize: 25 }} />}
+									icon={<BellOutlined style={{ fontSize: 25, color: isAtTop ? '#4f4f4f' : '#fff' }} />}
 								></Button>
 								{/* <Avatar size={40} src={<img src={profileData?.avatar} alt="avatar" />} /> */}
 								<Dropdown
@@ -167,7 +167,7 @@ function Header() {
 								</Dropdown>
 							</div>
 						) : (
-							<div className="d-flex justify-content-end align-items-end h-100">
+							<div className="d-flex justify-content-end align-items-center h-100">
 								<Button
 									className="me-3 button-header button-login"
 									onClick={() => {

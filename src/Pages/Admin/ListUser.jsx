@@ -1,9 +1,9 @@
 import { CalendarOutlined, ClockCircleOutlined, CloseOutlined, DeleteFilled, DeleteOutlined, EditFilled, EditOutlined, EyeOutlined, LockOutlined, MailOutlined, ManOutlined, UnlockOutlined, UserOutlined, WomanOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Descriptions, Form, Image, Input, Modal, Row, Space, Table, Tag, Typography } from 'antd'
+import { Button, Card, Col, Descriptions, Form, Image, Input, Modal, Row, Select, Space, Table, Tag, Typography } from 'antd'
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getStaff, getUserDetail, lockUser, setLoadingGetUserData } from '../../redux/reducer/modules/AdminReducer';
+import { changeRole, getStaff, getUserDetail, lockUser, setLoadingGetUserData, unLockUser } from '../../redux/reducer/modules/AdminReducer';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 const { Title } = Typography
@@ -13,9 +13,11 @@ function ListUser() {
     const [userId, setUserId] = useState()
     const [userIdLock, setUserIdLock] = useState()
     const [open, setOpen] = useState(false)
-    const [editing, setEditing] = useState(false)
     const [form] = useForm()
+    const [openRole, setOpenRole]= useState(false)
     const dispatch = useDispatch()
+    const [user, setUser]= useState()
+    const [role, setRole]= useState(null)
     useEffect(() => {
         dispatch(getStaff())
     }, [])
@@ -69,20 +71,30 @@ function ListUser() {
         {
             title: t('action'),
             key: 'action',
+            width:200,
             render: (text, record) => {
                 return <Space size="middle">
                     <Button loading={loadingGetUserData && userId == record?._id} type="text" size="small" icon={<EyeOutlined style={{ color: '#1677ff' }} />} onClick={() => {
                         setUserId(record?._id)
                     }}></Button>
-                    <Button loading={loadingLock && userIdLock == record?._id} type="text" size="small" icon={record?.isActive ? <UnlockOutlined style={{ color: 'green' }} /> : <LockOutlined style={{ color: 'red' }} />} onClick={async() => {
+                    <Button loading={loadingLock && userIdLock == record?._id} type="text" size="small" icon={!record?._destroy ? <UnlockOutlined style={{ color: 'green' }} /> : <LockOutlined style={{ color: 'red' }} />} onClick={async() => {
                         await setUserIdLock(record?._id)
-                        if(!record?.isActive){
+                        if(!record?._destroy){
                             dispatch(lockUser(record?._id))
                         }
                         else{
-                             dispatch(lockUser(record?._id))
+                            dispatch(unLockUser(record?._id))
                         }
                     }}></Button>
+                    {
+                        record?.role!=3 && <Button icon={<UserOutlined/>} onClick={()=>{
+                        setOpenRole(true)
+                        setRole(record?.role)
+                        setUser(record)
+                    }}>
+                        Chuyển vai trò
+                    </Button>
+                    }
                 </Space>
             }
         },
@@ -95,7 +107,17 @@ function ListUser() {
         return dayjs(timestamp).format('DD/MM/YYYY HH:mm');
     };
 
-console.log(dataStaff)
+    const handleChangeRole=async()=>{
+        const data={
+            email: user?.email,
+            role: role
+        }
+        const result = await dispatch(changeRole(data))
+        if(result?.payload?.data?.status=='success'){
+            setOpenRole(false)
+        }
+    }
+
 
     return (
         <Row className='mt-0 me-0 mt-5'>
@@ -182,6 +204,21 @@ console.log(dataStaff)
                                 </div>
                             )}
                         </Card>
+                    </Modal>
+                    <Modal centered open={openRole} onCancel={()=>setOpenRole(false)} closeIcon={null} onOk={()=>{
+                            handleChangeRole()
+                    }}>
+                            <Select className='w-100' value={role} onChange={(e)=>{setRole(e)}}>
+                                <Option value={1}>
+                                   Quản trị
+                                </Option>
+                                <Option value={2}>
+                                   Quản lý
+                                </Option>
+                                <Option value={4}>
+                                   Người dùng
+                                </Option>
+                            </Select>
                     </Modal>
                 </Card>
             </Col>
