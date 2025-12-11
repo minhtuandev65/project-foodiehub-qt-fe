@@ -266,7 +266,7 @@ function ListRestaurant() {
 		setOpenEdit(false);
 	};
 
-
+console.log(listTableMyRes)
 
 	return (
 		<Row className="mt-0 me-0 mt-5" style={{ padding: "72px 20px 0 20px" }}>
@@ -279,7 +279,7 @@ function ListRestaurant() {
 						<Col span={24}>
 							<Table
 								columns={columns}
-								dataSource={listTableMyRes.data}
+								dataSource={listTableMyRes?.data}
 								pagination={{
 									pageSize: 10,
 									showSizeChanger: true,
