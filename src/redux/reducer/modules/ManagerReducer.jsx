@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import * as  ManagerAPI from '../../api/ManagerApi'
 import showMessage from '../../../Helper/showMessage'
 
@@ -18,7 +18,10 @@ const initialState = {
     loadingGetStaff: false,
     dataStaff: [],
     loadingAddStaff: false,
-    loadingDeleteStaff: false
+    loadingDeleteStaff: false,
+    listMenu: [],
+    loadingGetMenu: false,
+    loadingAddMenu: false
 }
 
 const ManagerReducer = createSlice({
@@ -64,7 +67,7 @@ const ManagerReducer = createSlice({
         builder.addCase(getRestaurantDetail.fulfilled, (state, { payload }) => {
             console.log(payload)
             state.restaurantDetail = payload?.data?.data;
-            state.loadingGetRestaurants = false;
+            // state.loadingGetRestaurants = false;
         })
         builder.addCase(getRestaurantDetail.rejected, (state) => {
             state.loadingDetailRestaurant = false;
@@ -99,15 +102,30 @@ const ManagerReducer = createSlice({
         builder.addCase(getComments.rejected, (state) => {
             state.loadingGetComment = false;
         })
-         builder.addCase(addStaffRestaurant.pending, (state) => {
+        builder.addCase(addStaffRestaurant.pending, (state) => {
             state.loadingAddStaff = true;
         });
         builder.addCase(addStaffRestaurant.fulfilled, (state, { payload }) => {
             state.dataStaff.staffList = [...state.dataStaff.staffList, payload?.data?.data];
             state.loadingAddStaff = false;
         });
-        builder.addCase(addStaffRestaurant.rejected, (state, {payload}) => {
+        builder.addCase(addStaffRestaurant.rejected, (state, { payload }) => {
             state.loadingAddStaff = false;
+            showMessage(payload?.message, 'error')
+        })
+        builder.addCase(getListMenu.fulfilled, (state, { payload }) => {
+            state.listMenu = payload?.data?.data;
+            state.loadingGetMenu = false;
+        })
+         builder.addCase(addMenu.pending, (state) => {
+            state.loadingAddMenu = true;
+        });
+        builder.addCase(addMenu.fulfilled, (state, { payload }) => {
+            state.listMenu.menuList = [...state.listMenu.menuList, payload?.data?.data];
+            state.loadingAddMenu = false;
+        });
+        builder.addCase(addMenu.rejected, (state, { payload }) => {
+            state.loadingAddMenu = false;
             showMessage(payload?.message, 'error')
         })
     },
@@ -228,6 +246,30 @@ export const deleteRestaurant = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(error.response?.data || error);
         }
+    }
+);
+
+export const getListMenu = createAsyncThunk(
+    "staff/getListMenu",
+    async (restaurantId) => {
+        const res = await ManagerAPI.getListMenuRestaurantApi(restaurantId);
+        return res;
+    }
+);
+
+export const addMenu= createAsyncThunk(
+    "staff/addMenu",
+    async ({ restaurantId, data }) => {
+        const res = await ManagerAPI.addMenuApi(restaurantId, data);
+        return res;
+    }
+);
+
+export const editMenu= createAsyncThunk(
+    "staff/editMenu",
+    async ({ menuId, data }) => {
+        const res = await ManagerAPI.editMenuApi(menuId, data);
+        return res;
     }
 );
 

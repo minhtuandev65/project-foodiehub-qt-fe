@@ -70,3 +70,18 @@ export const deleteRestaurantApi=async(restaurantId)=>{
      const res= await instance.delete(`/v1/api/restaurant/manager/${restaurantId}/delete`)
     return res
 }
+
+export const getListMenuRestaurantApi = async (restaurantId) => {
+    const res = await instance.get(`/v1/api/menu/${restaurantId}`);
+    return res;
+};
+
+export const addMenuApi= async(restaurantId, data)=>{
+    const res = await instance.post(`/v1/api/menu/restaurant/${restaurantId}/menus`, data)
+    return res
+}
+
+export const editMenuApi= async(menuId, data)=>{
+    const res = await instance.put(`/v1/api/menu/restaurant/${menuId}`, data)
+    return res
+}

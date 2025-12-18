@@ -6,7 +6,7 @@ import ListCV from "../Pages/Manager/ListCV/ListCV";
 import ListRestaurant from "../Pages/Manager/Restaurant/ListRestaurant";
 import RestaurantDetail from "../Pages/Manager/Restaurant/RestaurantDetail";
 import Table from "../Pages/Manager/Table/Table";
-import Menu from "../Pages/Staff/Restaurant/Menu";
+import Menu from "../Pages/Manager/Restaurant/Menu";
 
 const ManagerRoute = [
 	{ path: ManagerPaths.GENERAL, element: <ManagerGeneral /> },

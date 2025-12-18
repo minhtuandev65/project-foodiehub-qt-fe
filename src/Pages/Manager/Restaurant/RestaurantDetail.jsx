@@ -105,6 +105,9 @@ export default function RestaurantDetail() {
                                         <Button
                                             type="primary"
                                             size="large"
+                                            onClick={() => {
+                                                navigate(`/${ManagerPaths.RES_MENU.replace(':restaurantId', restaurantDetail?._id)}`)
+                                            }}
                                             style={{
                                                 backgroundColor: '#F6A572',
                                                 borderColor: '#F6A572',
